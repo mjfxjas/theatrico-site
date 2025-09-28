@@ -84,6 +84,42 @@ function FadeWords({ words, videos, interval = 1000 }) {
   const [hoverSource, setHoverSource] = useState(null)
   const [revealed, setRevealed] = useState(() => new Set()) // indices that have been revealed
   const [autoShow, setAutoShow] = useState(false) // after 3s, show all
+  const [hoverEnabled, setHoverEnabled] = useState(true)
+
+  useEffect(() => {
+    const mq = typeof window !== 'undefined'
+      ? window.matchMedia('(hover: hover) and (pointer: fine)')
+      : null
+
+    const updateHoverState = (event) => {
+      const enabled = event?.matches ?? false
+      setHoverEnabled(enabled)
+      if (!enabled) {
+        setHoverIndex(null)
+        setHoverSource(null)
+      }
+    }
+
+    if (!mq) {
+      setHoverEnabled(false)
+      return () => {}
+    }
+
+    updateHoverState(mq)
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', updateHoverState)
+      return () => mq.removeEventListener('change', updateHoverState)
+    }
+
+    if (typeof mq.addListener === 'function') {
+      mq.addListener(updateHoverState)
+      return () => mq.removeListener(updateHoverState)
+    }
+
+    setHoverEnabled(false)
+    return () => {}
+  }, [])
 
   // Short, 2-sentence descriptions (max 3 lines via CSS clamp)
   const descriptions = [
@@ -123,6 +159,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
               columnGap: '2rem'
             }}
             onMouseEnter={() => {
+              if (!hoverEnabled) return
               setHoverIndex(i)
               setHoverSource('title')
               setRevealed(prev => {
@@ -132,6 +169,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
               })
             }}
             onMouseLeave={() => {
+              if (!hoverEnabled) return
               setHoverIndex(null)
               setHoverSource(null)
             }}
@@ -141,7 +179,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
               <Link
                 to={route}
                 style={{ textDecoration: 'none' }}
-                onPointerEnter={() => setHoverSource('title')}
+                onPointerEnter={() => hoverEnabled && setHoverSource('title')}
                 onFocus={() => {
                   setHoverIndex(i)
                   setHoverSource('title')
@@ -188,7 +226,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden'
                 }}
-                onPointerEnter={() => setHoverSource('paragraph')}
+                onPointerEnter={() => hoverEnabled && setHoverSource('paragraph')}
                 onFocus={() => {
                   setHoverIndex(i)
                   setHoverSource('paragraph')
@@ -202,7 +240,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
             <Link
               to={route}
               style={{ textDecoration: 'none' }}
-              onPointerEnter={() => setHoverSource('video')}
+              onPointerEnter={() => hoverEnabled && setHoverSource('video')}
               onFocus={() => {
                 setHoverIndex(i)
                 setHoverSource('video')
