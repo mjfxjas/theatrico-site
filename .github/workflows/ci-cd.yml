@@ -1,0 +1,83 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Select target bucket and role
+        run: |
+          if [ "${GITHUB_REF}" = "refs/heads/dev" ]; then
+            echo "DEST_BUCKET=${{ secrets.DEV_BUCKET }}" >> $GITHUB_ENV
+            echo "ASSUME_ROLE=${{ secrets.DEV_ROLE_ARN }}" >> $GITHUB_ENV
+          else
+            echo "DEST_BUCKET=${{ secrets.PROD_BUCKET }}" >> $GITHUB_ENV
+            echo "ASSUME_ROLE=${{ secrets.PROD_ROLE_ARN }}" >> $GITHUB_ENV
+          fi
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ env.ASSUME_ROLE }}
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync dist/ "s3://$DEST_BUCKET" --delete
+
+      - name: Invalidate CloudFront cache (dev)
+        if: github.ref == 'refs/heads/dev' && secrets.DEV_DISTRIBUTION_ID != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.DEV_DISTRIBUTION_ID }} \
+            --paths '/*'
+
+      - name: Invalidate CloudFront cache (prod)
+        if: github.ref == 'refs/heads/main' && secrets.PROD_DISTRIBUTION_ID != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.PROD_DISTRIBUTION_ID }} \
+            --paths '/*'

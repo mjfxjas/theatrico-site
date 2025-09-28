@@ -14,13 +14,30 @@ const instagramIcon = (
   </svg>
 )
 
-function ControlledVideo({ src, poster, playCount = 2, width = 200, height = 175 }) {
+function ControlledVideo({
+  src,
+  poster,
+  playCount = Infinity,
+  width = 200,
+  height = 175,
+  objectFit = 'cover'
+}) {
   const videoRef = useRef(null)
   const loopsRef = useRef(0)
 
   useEffect(() => {
     const videoEl = videoRef.current
     if (!videoEl) return
+
+    loopsRef.current = 0
+
+    if (!Number.isFinite(playCount)) {
+      videoEl.loop = true
+      videoEl.play().catch(() => {})
+      return () => {
+        videoEl.loop = false
+      }
+    }
 
     const handleEnded = () => {
       loopsRef.current += 1
@@ -33,13 +50,14 @@ function ControlledVideo({ src, poster, playCount = 2, width = 200, height = 175
       }
     }
 
+    videoEl.removeAttribute('loop')
     videoEl.addEventListener('ended', handleEnded)
     videoEl.play().catch(() => {})
 
     return () => {
       videoEl.removeEventListener('ended', handleEnded)
     }
-  }, [playCount, poster])
+  }, [playCount, poster, src])
 
   return (
     <video
@@ -49,7 +67,7 @@ function ControlledVideo({ src, poster, playCount = 2, width = 200, height = 175
       src={src}
       poster={poster}
       style={{
-        objectFit: 'cover',
+        objectFit,
         borderRadius: '12px',
         display: 'block',
         width,
@@ -152,10 +170,14 @@ function FadeWords({ words, videos, interval = 1000 }) {
                   y: (hoverIndex === i || revealed.has(i) || autoShow) ? 0 : 8,
                   x: 0,
                   filter: (hoverIndex === i || revealed.has(i) || autoShow) ? 'blur(0px)' : 'blur(1px)',
-                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.75 : 1,
+                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.85 : 1,
                   color: highlightText ? '#f1f1f5' : (hoverIndex !== null && hoverIndex !== i) ? '#6e6e73' : '#cfcfd6'
                 }}
-                whileHover={{ scale: 1.25, color: '#ffffff', transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
+                whileHover={{
+                  scale: 1,
+                  color: '#ffffff',
+                  transition: { duration: 1.2 * SPEED, ease: 'easeInOut' }
+                }}
                 transition={{ duration: 1.5 * SPEED, ease: 'easeOut', delay: i * 0.12 + 0.1 }}
                 style={{
                   fontSize: '1rem',
@@ -200,9 +222,18 @@ function FadeWords({ words, videos, interval = 1000 }) {
                   scale: isDim ? 0.75 : 1
                 }}
                 transition={{ duration: 1.2 * SPEED, ease: 'easeOut', delay: i * 0.12 + 0.2 }}
-                whileHover={{ scale: 1.15, boxShadow: "0 10px 28px rgba(0,0,0,0.28)", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
+                whileHover={{
+                  scale: 1.15,
+                  boxShadow: '0 10px 28px rgba(0,0,0,0.28)',
+                  transition: { duration: 1.6 * SPEED, ease: 'easeInOut' }
+                }}
               >
-                <ControlledVideo src={videos[i]} poster="/media/poster-placeholder.jpg" />
+                <ControlledVideo
+                  src={videos[i]}
+                  poster="/media/poster-placeholder.jpg"
+                  width={200}
+                  height={175}
+                />
               </Motion.div>
             </Link>
           </div>
@@ -702,7 +733,7 @@ function Hero() {
       <div className="container hero__content">
         <FadeWords
           words={["Theater", "Production", "Events"]}
-          videos={["/media/theater.mov", "/media/production.mov", "/media/event.mov"]}
+          videos={["/media/fantastick.mov", "/media/production.mov", "/media/event.mov"]}
           interval={1000}
         />
       </div>
@@ -743,7 +774,11 @@ function PageShell({ title, videoSrc, description, highlights }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 * SPEED, ease: 'easeOut', delay: 0.1 }}
-            whileHover={{ scale: 1.15, boxShadow: "0 10px 28px rgba(0,0,0,0.28)", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
+            whileHover={{
+              scale: 1.15,
+              boxShadow: '0 10px 28px rgba(0,0,0,0.28)',
+              transition: { duration: 1.6 * SPEED, ease: 'easeInOut' }
+            }}
           >
             <ControlledVideo src={videoSrc} poster="/media/poster-placeholder.jpg" width={300} height={220} />
           </Motion.div>
@@ -757,7 +792,7 @@ function TheaterPage() {
   return (
     <PageShell
       title="Theater"
-      videoSrc="/media/theater.mov"
+      videoSrc="/media/fantastick.mov"
       description="Cue-to-cue precision for stage productions, premieres, and plays. Our team manages rehearsals, calling, and lighting so artists can focus on the story."
       highlights={[
         'Show calling and stage management tailored to your venue',
