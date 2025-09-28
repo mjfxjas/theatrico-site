@@ -87,9 +87,12 @@ function FadeWords({ words, videos, interval = 1000 }) {
   const [hoverEnabled, setHoverEnabled] = useState(true)
 
   useEffect(() => {
-    const mq = typeof window !== 'undefined'
-      ? window.matchMedia('(hover: hover) and (pointer: fine)')
-      : null
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      setHoverEnabled(false)
+      return () => {}
+    }
+
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
 
     const updateHoverState = (event) => {
       const enabled = event?.matches ?? false
@@ -100,24 +103,18 @@ function FadeWords({ words, videos, interval = 1000 }) {
       }
     }
 
-    if (!mq) {
-      setHoverEnabled(false)
-      return () => {}
-    }
-
     updateHoverState(mq)
 
-    if (typeof mq.addEventListener === 'function') {
+    if (typeof mq.addEventListener === 'function' && typeof mq.removeEventListener === 'function') {
       mq.addEventListener('change', updateHoverState)
       return () => mq.removeEventListener('change', updateHoverState)
     }
 
-    if (typeof mq.addListener === 'function') {
+    if (typeof mq.addListener === 'function' && typeof mq.removeListener === 'function') {
       mq.addListener(updateHoverState)
       return () => mq.removeListener(updateHoverState)
     }
 
-    setHoverEnabled(false)
     return () => {}
   }, [])
 
@@ -406,9 +403,13 @@ function Header({ onOpenContact }) {
   const [isTouchNav, setIsTouchNav] = useState(false)
 
   useEffect(() => {
-    const mq = typeof window !== 'undefined'
-      ? window.matchMedia('(hover: hover) and (pointer: fine)')
-      : null
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      setIsTouchNav(true)
+      setLinksRevealed(false)
+      return () => {}
+    }
+
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
 
     const updateNavMode = (event) => {
       const canHover = event?.matches ?? false
@@ -418,20 +419,14 @@ function Header({ onOpenContact }) {
       }
     }
 
-    if (!mq) {
-      setIsTouchNav(true)
-      setLinksRevealed(false)
-      return () => {}
-    }
-
     updateNavMode(mq)
 
-    if (typeof mq.addEventListener === 'function') {
+    if (typeof mq.addEventListener === 'function' && typeof mq.removeEventListener === 'function') {
       mq.addEventListener('change', updateNavMode)
       return () => mq.removeEventListener('change', updateNavMode)
     }
 
-    if (typeof mq.addListener === 'function') {
+    if (typeof mq.addListener === 'function' && typeof mq.removeListener === 'function') {
       mq.addListener(updateNavMode)
       return () => mq.removeListener(updateNavMode)
     }
