@@ -403,7 +403,61 @@ export default function App() {
 
 function Header({ onOpenContact }) {
   const [linksRevealed, setLinksRevealed] = useState(false)
+  const [isTouchNav, setIsTouchNav] = useState(false)
+
+  useEffect(() => {
+    const mq = typeof window !== 'undefined'
+      ? window.matchMedia('(hover: hover) and (pointer: fine)')
+      : null
+
+    const updateNavMode = (event) => {
+      const canHover = event?.matches ?? false
+      setIsTouchNav(!canHover)
+      if (!canHover) {
+        setLinksRevealed(false)
+      }
+    }
+
+    if (!mq) {
+      setIsTouchNav(true)
+      setLinksRevealed(false)
+      return () => {}
+    }
+
+    updateNavMode(mq)
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', updateNavMode)
+      return () => mq.removeEventListener('change', updateNavMode)
+    }
+
+    if (typeof mq.addListener === 'function') {
+      mq.addListener(updateNavMode)
+      return () => mq.removeListener(updateNavMode)
+    }
+
+    return () => {}
+  }, [])
+
+  useEffect(() => {
+    if (!isTouchNav || !linksRevealed) return
+
+    const timeoutId = setTimeout(() => setLinksRevealed(false), 4000)
+    return () => clearTimeout(timeoutId)
+  }, [isTouchNav, linksRevealed])
+
   const revealLinks = () => setLinksRevealed(true)
+  const hideLinks = () => setLinksRevealed(false)
+  const handleNavItemClick = () => {
+    if (isTouchNav) hideLinks()
+  }
+  const handleBrandClick = () => {
+    if (isTouchNav) {
+      setLinksRevealed(prev => !prev)
+    } else {
+      revealLinks()
+    }
+  }
   const expanded = linksRevealed
   const navLinks = [
     { to: '/theater', label: 'Theater' },
@@ -426,7 +480,7 @@ function Header({ onOpenContact }) {
           style={{ display: 'inline-block', cursor: 'pointer' }}
           onHoverStart={revealLinks}
           onFocus={revealLinks}
-          onClick={revealLinks}
+          onClick={handleBrandClick}
         >
           <NavLink to="/" className="brand" style={{ textDecoration: 'none', color: 'inherit' }}>
             <span className="logo">T</span>
@@ -441,6 +495,7 @@ function Header({ onOpenContact }) {
               to={to}
               className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
               onFocus={revealLinks}
+              onClick={handleNavItemClick}
             >
               {label}
             </NavLink>
@@ -455,6 +510,7 @@ function Header({ onOpenContact }) {
             whileHover={{ scale: 1.08, color: 'var(--text)' }}
             transition={{ duration: 0.4 * SPEED, ease: 'easeOut' }}
             onMouseEnter={revealLinks}
+            onClick={handleNavItemClick}
             onFocus={revealLinks}
           >
             {instagramIcon}
@@ -469,6 +525,7 @@ function Header({ onOpenContact }) {
               to="/login"
               className={({ isActive }) => `btn btn--ghost nav-action-link${isActive ? ' active' : ''}`}
               onFocus={revealLinks}
+              onClick={handleNavItemClick}
             >
               Login
             </NavLink>
@@ -477,7 +534,10 @@ function Header({ onOpenContact }) {
             className="btn"
             whileHover={{ scale: 1.08, color: 'var(--text)' }}
             transition={{ duration: 0.5 * SPEED, ease: 'easeOut' }}
-            onClick={() => onOpenContact && onOpenContact()}
+            onClick={() => {
+              if (onOpenContact) onOpenContact()
+              handleNavItemClick()
+            }}
             onFocus={revealLinks}
             onMouseEnter={revealLinks}
           >
