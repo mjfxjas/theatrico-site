@@ -68,11 +68,13 @@ function ControlledVideo({
       poster={poster}
       style={{
         objectFit,
-        borderRadius: '12px',
+        borderRadius: '18px',
         display: 'block',
         width,
         height,
-        background: '#030305'
+        background: 'linear-gradient(180deg, rgba(14, 14, 26, 0.9), rgba(26, 26, 40, 0.85))',
+        boxShadow: '0 18px 42px rgba(6, 6, 18, 0.55)',
+        border: '1px solid rgba(255, 255, 255, 0.08)'
       }}
     />
   )
@@ -107,7 +109,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
   }, []);
 
   return (
-    <div style={{ display: 'grid', rowGap: '2.4rem', justifyContent: 'center' }}>
+    <div className="hero__matrix">
       {words.slice(0, visibleCount).map((word, i) => {
         const isDim = hoverIndex !== null && hoverIndex !== i
         const isActive = hoverIndex === i
@@ -116,12 +118,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
         return (
           <div
             key={i}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(260px, 440px) auto',
-              alignItems: 'center',
-              columnGap: '2rem'
-            }}
+            className="hero__matrix-row"
             onMouseEnter={() => {
               setHoverIndex(i)
               setHoverSource('title')
@@ -137,10 +134,10 @@ function FadeWords({ words, videos, interval = 1000 }) {
             }}
           >
             {/* Word + Description (left column) */}
-            <div>
+            <div className="hero__matrix-copy">
               <Link
                 to={route}
-                style={{ textDecoration: 'none' }}
+                className="hero__matrix-link"
                 onPointerEnter={() => setHoverSource('title')}
                 onFocus={() => {
                   setHoverIndex(i)
@@ -153,25 +150,42 @@ function FadeWords({ words, videos, interval = 1000 }) {
                     opacity: isDim ? 0.65 : 1,
                     x: 0,
                     filter: isDim ? 'blur(1px)' : 'blur(0px)',
-                    scale: isDim ? 0.75 : 1,
-                    color: highlightText ? '#ffffff' : isDim ? '#6e6e73' : '#EAE6D6'
+                    scale: isDim ? 0.9 : 1,
+                    color: highlightText ? '#ffffff' : isDim ? '#7b7b86' : '#f8f4e7',
+                    textShadow: highlightText
+                      ? '0 22px 48px rgba(8, 8, 18, 0.6)'
+                      : isDim
+                        ? '0 8px 18px rgba(8, 8, 18, 0.4)'
+                        : '0 16px 36px rgba(8, 8, 18, 0.55)'
                   }}
-                transition={{ duration: 1.2 * SPEED, ease: 'easeOut', delay: i * 0.12 }}
-                whileHover={{ scale: 1.25, color: "#ffffff", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
-                  style={{ textAlign: 'left', cursor: 'pointer' }}
+                  transition={{ duration: 1.2 * SPEED, ease: 'easeOut', delay: i * 0.12 }}
+                  whileHover={{
+                    scale: 1.12,
+                    color: '#ffffff',
+                    textShadow: '0 28px 60px rgba(8, 8, 18, 0.65)',
+                    transition: { duration: 1.4 * SPEED, ease: 'easeInOut' }
+                  }}
+                  style={{
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: 'clamp(2.65rem, 7vw, 3.95rem)',
+                    lineHeight: 1.05,
+                    letterSpacing: '-0.02em'
+                  }}
                 >
                   {word}
                 </Motion.h1>
               </Link>
               <Motion.p
+                className="hero__matrix-description"
                 initial={{ opacity: 0, x: -64, filter: 'blur(1px)' }}
                 animate={{
                   opacity: (hoverIndex === i || revealed.has(i) || autoShow) ? 1 : 0,
                   y: (hoverIndex === i || revealed.has(i) || autoShow) ? 0 : 8,
                   x: 0,
                   filter: (hoverIndex === i || revealed.has(i) || autoShow) ? 'blur(0px)' : 'blur(1px)',
-                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.85 : 1,
-                  color: highlightText ? '#f1f1f5' : (hoverIndex !== null && hoverIndex !== i) ? '#6e6e73' : '#cfcfd6'
+                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.95 : 1,
+                  color: highlightText ? '#ffffff' : (hoverIndex !== null && hoverIndex !== i) ? '#6f7184' : 'rgba(248, 244, 231, 0.78)'
                 }}
                 whileHover={{
                   scale: 1,
@@ -179,15 +193,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
                   transition: { duration: 1.2 * SPEED, ease: 'easeInOut' }
                 }}
                 transition={{ duration: 1.5 * SPEED, ease: 'easeOut', delay: i * 0.12 + 0.1 }}
-                style={{
-                  fontSize: '1rem',
-                  maxWidth: '40ch',
-                  marginTop: '0.25rem',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden'
-                }}
+                style={{ margin: 0 }}
                 onPointerEnter={() => setHoverSource('paragraph')}
                 onFocus={() => {
                   setHoverIndex(i)
@@ -201,7 +207,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
             {/* Video (right column) */}
             <Link
               to={route}
-              style={{ textDecoration: 'none' }}
+              className="hero__matrix-link"
               onPointerEnter={() => setHoverSource('video')}
               onFocus={() => {
                 setHoverIndex(i)
@@ -214,25 +220,26 @@ function FadeWords({ words, videos, interval = 1000 }) {
               }}
             >
               <Motion.div
+                className="hero__matrix-visual"
                 initial={{ opacity: 0, x: -64 }}
                 animate={{
-                  opacity: isDim ? 0.65 : 1,
+                  opacity: isDim ? 0.7 : 1,
                   x: 0,
                   filter: isDim ? 'blur(1px)' : 'blur(0px)',
-                  scale: isDim ? 0.75 : 1
+                  scale: isDim ? 0.92 : 1
                 }}
                 transition={{ duration: 1.2 * SPEED, ease: 'easeOut', delay: i * 0.12 + 0.2 }}
                 whileHover={{
-                  scale: 1.15,
-                  boxShadow: '0 10px 28px rgba(0,0,0,0.28)',
+                  scale: 1.08,
+                  boxShadow: '0 24px 56px rgba(8, 8, 18, 0.6)',
                   transition: { duration: 1.6 * SPEED, ease: 'easeInOut' }
                 }}
               >
                 <ControlledVideo
                   src={videos[i]}
                   poster="/media/poster-placeholder.jpg"
-                  width={200}
-                  height={175}
+                  width={220}
+                  height={180}
                 />
               </Motion.div>
             </Link>
@@ -277,12 +284,12 @@ function ContactModal({ onClose }) {
         transition={{ duration: 0.24 * SPEED, ease: 'easeOut' }}
         style={{
           width: 'min(560px, 92vw)',
-          borderRadius: 16,
-          padding: 20,
-          background: 'linear-gradient(180deg,#141417,#101013)',
-          border: '1px solid #2a2a2e',
-          color: '#f5f5f7',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
+          borderRadius: 20,
+          padding: '2rem',
+          background: 'linear-gradient(160deg, rgba(16, 16, 34, 0.96), rgba(30, 22, 48, 0.88))',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          color: 'var(--text)',
+          boxShadow: '0 32px 80px rgba(6, 6, 18, 0.6)'
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -297,7 +304,7 @@ function ContactModal({ onClose }) {
             value={form.name}
             onChange={handleChange}
             required
-            style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2e', background: '#121214', color: '#f5f5f7' }}
+            style={{ padding: '12px 16px', borderRadius: 14, border: '1px solid rgba(255, 255, 255, 0.12)', background: 'rgba(10, 10, 18, 0.7)', color: 'var(--text)', boxShadow: '0 12px 26px rgba(6, 6, 18, 0.4)' }}
           />
           <input
             type="email"
@@ -306,7 +313,7 @@ function ContactModal({ onClose }) {
             value={form.email}
             onChange={handleChange}
             required
-            style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2e', background: '#121214', color: '#f5f5f7' }}
+            style={{ padding: '12px 16px', borderRadius: 14, border: '1px solid rgba(255, 255, 255, 0.12)', background: 'rgba(10, 10, 18, 0.7)', color: 'var(--text)', boxShadow: '0 12px 26px rgba(6, 6, 18, 0.4)' }}
           />
           <textarea
             name="message"
@@ -315,20 +322,20 @@ function ContactModal({ onClose }) {
             onChange={handleChange}
             required
             rows={5}
-            style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2e', background: '#121214', color: '#f5f5f7', resize: 'vertical' }}
+            style={{ padding: '12px 16px', borderRadius: 14, border: '1px solid rgba(255, 255, 255, 0.12)', background: 'rgba(10, 10, 18, 0.7)', color: 'var(--text)', resize: 'vertical', boxShadow: '0 12px 26px rgba(6, 6, 18, 0.4)' }}
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 6 }}>
             <Motion.button type="button" onClick={onClose} className="btn btn--ghost"
               whileHover={{ scale: 1.12, color: '#EAE6D6' }}
               transition={{ duration: 1.0 * SPEED, ease: 'easeInOut' }}
-              style={{ borderRadius: 10, padding: '10px 14px' }}
+              style={{ borderRadius: 14, padding: '10px 16px' }}
             >
               Cancel
             </Motion.button>
             <Motion.button type="submit" className="btn"
               whileHover={{ scale: 1.12 }}
               transition={{ duration: 1.0 * SPEED, ease: 'easeInOut' }}
-              style={{ borderRadius: 10, padding: '12px 16px' }}
+              style={{ borderRadius: 14, padding: '12px 20px' }}
             >
               Send
             </Motion.button>
@@ -477,97 +484,90 @@ function FadeProfiles({ names, photos, interval = 1000 }) {
   }, []);
 
   return (
-    <div style={{ display: 'grid', rowGap: '2.4rem', justifyContent: 'center' }}>
+    <div className="hero__matrix hero__matrix--profiles">
       {names.slice(0, visibleCount).map((name, i) => {
         const isDim = hoverIndex !== null && hoverIndex !== i;
         const photo = photos[i] || '/placeholder-portrait.png';
         return (
           <div
             key={i}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(260px, 440px) auto',
-              alignItems: 'center',
-              columnGap: '2rem'
+            className="hero__matrix-row hero__matrix-row--profiles"
+            onMouseEnter={() => {
+              setHoverIndex(i);
+              setRevealed(prev => {
+                const next = new Set(prev);
+                next.add(i);
+                return next;
+              });
             }}
+            onMouseLeave={() => setHoverIndex(null)}
           >
-            {/* Name + Bio (left column) */}
-            <div>
+            <div className="hero__matrix-copy">
               <Motion.h1
                 initial={{ opacity: 0, y: 10, filter: 'blur(2px)' }}
                 animate={{
                   opacity: isDim ? 0.65 : 1,
                   y: 0,
                   filter: isDim ? 'blur(1px)' : 'blur(0px)',
-                  scale: isDim ? 0.75 : 1,
-                  color: isDim ? '#6e6e73' : '#EAE6D6'
+                  scale: isDim ? 0.92 : 1,
+                  color: isDim ? '#7b7b86' : '#f8f4e7',
+                  textShadow: isDim ? '0 8px 18px rgba(8, 8, 18, 0.4)' : '0 18px 40px rgba(8, 8, 18, 0.55)'
                 }}
-                transition={{ duration: 1.6 * SPEED, ease: 'easeInOut' }}
-                whileHover={{ scale: 1.25, color: "#ffffff", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
-                style={{ textAlign: 'left', cursor: 'default' }}
-                onHoverStart={() => { setHoverIndex(i); setRevealed(prev => { const next = new Set(prev); next.add(i); return next; }); }}
-                onHoverEnd={() => setHoverIndex(null)}
+                transition={{ duration: 1.4 * SPEED, ease: 'easeOut' }}
+                whileHover={{
+                  scale: 1.08,
+                  color: '#ffffff',
+                  textShadow: '0 28px 60px rgba(8, 8, 18, 0.65)',
+                  transition: { duration: 1.4 * SPEED, ease: 'easeInOut' }
+                }}
+                style={{
+                  textAlign: 'left',
+                  cursor: 'default',
+                  fontSize: 'clamp(2.1rem, 4.5vw, 2.9rem)',
+                  letterSpacing: '-0.01em'
+                }}
               >
                 {name}
               </Motion.h1>
               <Motion.p
+                className="hero__matrix-description"
                 initial={{ opacity: 0, y: 8, filter: 'blur(1px)' }}
                 animate={{
                   opacity: (hoverIndex === i || revealed.has(i) || autoShow) ? 1 : 0,
                   y: (hoverIndex === i || revealed.has(i) || autoShow) ? 0 : 8,
                   filter: (hoverIndex === i || revealed.has(i) || autoShow) ? 'blur(0px)' : 'blur(1px)',
-                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.75 : 1,
-                  color: (hoverIndex !== null && hoverIndex !== i) ? '#6e6e73' : '#cfcfd6'
+                  scale: (hoverIndex !== null && hoverIndex !== i) ? 0.96 : 1,
+                  color: (hoverIndex !== null && hoverIndex !== i) ? '#6f7184' : 'rgba(248, 244, 231, 0.78)'
                 }}
-                whileHover={{ scale: 1.25, color: '#ffffff', transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
-                transition={{ duration: 2.4 * SPEED, ease: 'easeInOut' }}
-                style={{
-                  fontSize: '1rem',
-                  maxWidth: '40ch',
-                  marginTop: '0.25rem',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden'
-                }}
+                transition={{ duration: 1.6 * SPEED, ease: 'easeOut' }}
+                style={{ margin: 0 }}
               >
                 {bios[i]}
               </Motion.p>
-              {/* Socials */}
-              <div style={{ marginTop: 8, display: 'flex', gap: 12 }}>
-                <a href="https://instagram.com/placeholder" target="_blank" rel="noreferrer" style={{ color: '#EAE6D6', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  {instagramIcon} <span style={{ fontSize: 14 }}>Instagram</span>
+              <div className="hero__matrix-socials">
+                <a className="hero__matrix-social" href="https://instagram.com/placeholder" target="_blank" rel="noreferrer">
+                  {instagramIcon}
+                  <span>Instagram</span>
                 </a>
               </div>
             </div>
-
-            {/* Photo (right column) */}
-            <div
-              onMouseEnter={() => { setHoverIndex(i); setRevealed(prev => { const next = new Set(prev); next.add(i); return next; }); }}
-              onMouseLeave={() => setHoverIndex(null)}
+            <Motion.div
+              className="hero__matrix-visual hero__matrix-visual--portrait"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{
+                opacity: isDim ? 0.7 : 1,
+                y: 0,
+                scale: isDim ? 0.92 : 1
+              }}
+              transition={{ duration: 1.2 * SPEED, ease: 'easeOut', delay: 0.1 }}
+              whileHover={{
+                scale: 1.08,
+                boxShadow: '0 28px 64px rgba(8, 8, 18, 0.6)',
+                transition: { duration: 1.6 * SPEED, ease: 'easeInOut' }
+              }}
             >
-              <Motion.img
-                src={photo}
-                alt={`${name} portrait`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: isDim ? 0.65 : 1,
-                  y: 0,
-                  filter: isDim ? 'blur(1px)' : 'blur(0px)',
-                  scale: isDim ? 0.75 : 1
-                }}
-                transition={{ duration: 1.6 * SPEED, ease: 'easeInOut', delay: 0.08 }}
-                whileHover={{ scale: 1.15, boxShadow: "0 10px 28px rgba(0,0,0,0.28)", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
-                style={{
-                  objectFit: "cover",
-                  borderRadius: "12px",
-                  display: "block",
-                  width: 200,
-                  height: 175,
-                  background: '#222'
-                }}
-              />
-            </div>
+              <img src={photo} alt={`${name} portrait`} loading="lazy" />
+            </Motion.div>
           </div>
         )
       })}
@@ -577,12 +577,17 @@ function FadeProfiles({ names, photos, interval = 1000 }) {
 
 function PeoplePage() {
   return (
-    <section className="hero">
-      <div className="hero__bg" aria-hidden="true"></div>
-      <div className="container hero__content" style={{ gap: 24 }}>
-        <div style={{ maxWidth: '60ch' }}>
-          <h2 style={{ margin: 0 }}>Meet the team</h2>
-          <p style={{ marginTop: '0.5rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+    <section className="hero hero--sub hero--team">
+      <div className="hero__bg" aria-hidden="true">
+        <span className="grain-overlay" aria-hidden="true"></span>
+      </div>
+      <span className="decor-orb decor-orb--peach hero__orb hero__orb--left" aria-hidden="true"></span>
+      <span className="decor-orb decor-orb--violet hero__orb hero__orb--right" aria-hidden="true"></span>
+      <span className="decor-ring hero__ring" aria-hidden="true"></span>
+      <div className="container hero__content hero__content--sub hero__content--team">
+        <div className="hero__sub-copy hero__team-copy">
+          <h2>Meet the team</h2>
+          <p>
             Theatrico brings together producers, directors, designers, and show callers who have led Broadway tours, launch shows, and destination gatherings. We build bespoke crews around each engagement so you get senior expertise, responsive communication, and a calm show day.
           </p>
         </div>
@@ -728,14 +733,50 @@ function LoginPage() {
 
 function Hero() {
   return (
-    <section className="hero">
-      <div className="hero__bg" aria-hidden="true"></div>
+    <section className="hero hero--home">
+      <div className="hero__bg" aria-hidden="true">
+        <span className="grain-overlay" aria-hidden="true"></span>
+      </div>
+      <span className="decor-orb decor-orb--peach hero__orb hero__orb--left" aria-hidden="true"></span>
+      <span className="decor-orb decor-orb--violet hero__orb hero__orb--right" aria-hidden="true"></span>
+      <span className="decor-ring hero__ring" aria-hidden="true"></span>
       <div className="container hero__content">
-        <FadeWords
-          words={["Theater", "Production", "Events"]}
-          videos={["/media/fantastick.mov", "/media/production.mov", "/media/event.mov"]}
-          interval={1000}
-        />
+        <div className="hero__intro">
+          <Motion.span
+            className="hero__eyebrow"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 * SPEED, ease: 'easeOut' }}
+          >
+            Stagecraft & storytelling
+          </Motion.span>
+          <FadeWords
+            words={["Theater", "Production", "Events"]}
+            videos={["/media/fantastick.mov", "/media/production.mov", "/media/event.mov"]}
+            interval={1000}
+          />
+          <Motion.p
+            className="hero__lead"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4 * SPEED, ease: 'easeOut', delay: 0.2 }}
+          >
+            Creative direction, technical calling, and cinematic capture under one collaborative team. We design the arc, produce the crew, and run the room so your story lands.
+          </Motion.p>
+          <Motion.div
+            className="hero__actions"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4 * SPEED, ease: 'easeOut', delay: 0.3 }}
+          >
+            <Link className="btn" to="/events">
+              Plan an event
+            </Link>
+            <a className="btn btn--ghost" href="#work">
+              Watch the reel
+            </a>
+          </Motion.div>
+        </div>
       </div>
     </section>
   )
@@ -743,44 +784,61 @@ function Hero() {
 
 function PageShell({ title, videoSrc, description, highlights }) {
   return (
-    <section className="hero">
-      <div className="hero__bg" aria-hidden="true"></div>
-      <div className="container hero__content" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', minHeight: '60vh' }}>
-        <div style={{ gridColumn: '1 / 2', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+    <section className="hero hero--sub">
+      <div className="hero__bg" aria-hidden="true">
+        <span className="grain-overlay" aria-hidden="true"></span>
+      </div>
+      <span className="decor-orb decor-orb--peach hero__orb hero__orb--left" aria-hidden="true"></span>
+      <span className="decor-orb decor-orb--fuchsia hero__orb hero__orb--right" aria-hidden="true"></span>
+      <span className="decor-ring hero__ring" aria-hidden="true"></span>
+      <div className="container hero__content hero__content--sub">
+        <div className="hero__sub-copy">
           <Motion.h1
             initial={{ opacity: 0, y: 10, filter: 'blur(2px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)', color: '#EAE6D6' }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              filter: 'blur(0px)',
+              color: '#f8f4e7',
+              textShadow: '0 18px 40px rgba(8, 8, 18, 0.55)'
+            }}
             transition={{ duration: 0.8 * SPEED, ease: 'easeOut' }}
-            whileHover={{ scale: 1.25, color: "#ffffff", transition: { duration: 1.6 * SPEED, ease: 'easeInOut' } }}
-            style={{ textAlign: 'left' }}
+            whileHover={{
+              scale: 1.08,
+              color: '#ffffff',
+              textShadow: '0 28px 60px rgba(8, 8, 18, 0.65)',
+              transition: { duration: 1.4 * SPEED, ease: 'easeInOut' }
+            }}
+            style={{ textAlign: 'left', fontSize: 'clamp(2.6rem, 5vw, 3.4rem)' }}
           >
             {title}
           </Motion.h1>
           {description && (
-            <p style={{ marginTop: '0.75rem', maxWidth: '52ch', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+            <p>
               {description}
             </p>
           )}
           {highlights && (
-            <ul style={{ marginTop: '1rem', paddingLeft: '1.2rem', display: 'grid', gap: '0.35rem', color: 'var(--text-muted)' }}>
+            <ul>
               {highlights.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
           )}
         </div>
-        <div style={{ gridColumn: '2 / 3', display: 'flex', justifyContent: 'center' }}>
+        <div className="hero__sub-visual">
           <Motion.div
+            className="hero__matrix-visual hero__matrix-visual--large"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 * SPEED, ease: 'easeOut', delay: 0.1 }}
             whileHover={{
-              scale: 1.15,
-              boxShadow: '0 10px 28px rgba(0,0,0,0.28)',
+              scale: 1.05,
+              boxShadow: '0 28px 64px rgba(8, 8, 18, 0.6)',
               transition: { duration: 1.6 * SPEED, ease: 'easeInOut' }
             }}
           >
-            <ControlledVideo src={videoSrc} poster="/media/poster-placeholder.jpg" width={300} height={220} />
+            <ControlledVideo src={videoSrc} poster="/media/poster-placeholder.jpg" width={320} height={240} />
           </Motion.div>
         </div>
       </div>
@@ -834,14 +892,18 @@ function EventsPage() {
 function Logos() {
   return (
     <section className="container logos" aria-label="Trusted by">
-      <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-        <span className="muted">Trusted by teams at</span>
-      </div>
-      <div className="logos__row">
-        <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
-        <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
-        <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
-        <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
+      <div className="section-surface section-surface--muted logos__surface">
+        <span className="grain-overlay" aria-hidden="true"></span>
+        <span className="decor-orb decor-orb--violet logos__orb" aria-hidden="true"></span>
+        <div className="logos__heading">
+          <span className="muted">Trusted by teams at</span>
+        </div>
+        <div className="logos__row">
+          <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
+          <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
+          <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
+          <div className="logoBox"><img src="/placeholder-logo.png" alt="Placeholder logo" style={{ maxHeight: '40px' }} /></div>
+        </div>
       </div>
     </section>
   )
@@ -849,23 +911,31 @@ function Logos() {
 
 function Features() {
   return (
-    <section id="services" className="container grid2 features">
-      <div>
-        <h2>What we do</h2>
-        <ul className="featureList">
-          <li><strong>Live Events:</strong> staging, lighting direction, show-calling</li>
-          <li><strong>Brand Experiences:</strong> launches, pop-ups, hospitality</li>
-          <li><strong>Cinematic Promos:</strong> scripting, shoot, edit, color</li>
-          <li><strong>Full Service:</strong> creative direction to on-site ops</li>
-        </ul>
+    <section id="services" className="features">
+      <div className="container">
+        <div className="section-surface section-surface--glow features__surface">
+          <span className="grain-overlay" aria-hidden="true"></span>
+          <span className="decor-orb decor-orb--peach features__orb" aria-hidden="true"></span>
+          <div className="features__grid">
+            <div className="features__copy">
+              <h2>What we do</h2>
+              <ul className="featureList">
+                <li><strong>Live Events:</strong> staging, lighting direction, show-calling</li>
+                <li><strong>Brand Experiences:</strong> launches, pop-ups, hospitality</li>
+                <li><strong>Cinematic Promos:</strong> scripting, shoot, edit, color</li>
+                <li><strong>Full Service:</strong> creative direction to on-site ops</li>
+              </ul>
+            </div>
+            <Card
+              title="Signature Package"
+              text="End-to-end creative and production for one hero event + a 60–90s film deliverable and cutdowns."
+              bullets={['Creative treatment', 'Run of show', 'Crew & gear', '4K master + social']}
+              cta="See sample scope"
+              href="#work"
+            />
+          </div>
+        </div>
       </div>
-      <Card
-        title="Signature Package"
-        text="End-to-end creative and production for one hero event + a 60–90s film deliverable and cutdowns."
-        bullets={['Creative treatment', 'Run of show', 'Crew & gear', '4K master + social']}
-        cta="See sample scope"
-        href="#work"
-      />
     </section>
   )
 }
@@ -885,36 +955,50 @@ function Card({ title, text, bullets, cta, href }) {
 
 function Showreel() {
   return (
-    <section id="work" className="container showreel">
-      <h2>Showreel</h2>
-      {/* Swap the src with your real video or a Vimeo/YouTube embed */}
-      <div className="videoWrap">
-        <video controls playsInline poster="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop">
-          <source src="" type="video/mp4" />
-        </video>
+    <section id="work" className="showreel">
+      <div className="container">
+        <div className="section-surface section-surface--glow showreel__surface">
+          <span className="grain-overlay" aria-hidden="true"></span>
+          <span className="decor-orb decor-orb--fuchsia showreel__orb" aria-hidden="true"></span>
+          <div className="showreel__heading">
+            <h2>Showreel</h2>
+            <p className="muted">Moments from premieres, brand films, and destination gatherings.</p>
+          </div>
+          <div className="videoWrap">
+            <video controls playsInline poster="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop">
+              <source src="" type="video/mp4" />
+            </video>
+          </div>
+          <p className="muted showreel__note">Prefer Vimeo/YouTube? Replace this block with their embed code.</p>
+        </div>
       </div>
-      <p className="muted">Prefer Vimeo/YouTube? Replace this block with their embed code.</p>
     </section>
   )
 }
 
 function Testimonials() {
   return (
-    <section className="container testimonials">
-      <h2>What clients say</h2>
-      <div className="grid3">
-        <Quote
-          text="Theatrico took our fuzzy idea and turned it into a knockout event and film."
-          author="Marketing Director, Collier"
-        />
-        <Quote
-          text="Flawless execution. Our audience was blown away."
-          author="Producer, Side Quest"
-        />
-        <Quote
-          text="Fast, clear, and cinematic. Exactly what we needed."
-          author="Head of Comms, CCS"
-        />
+    <section className="testimonials">
+      <div className="container">
+        <div className="section-surface section-surface--muted testimonials__surface">
+          <span className="grain-overlay" aria-hidden="true"></span>
+          <span className="decor-orb decor-orb--violet testimonials__orb" aria-hidden="true"></span>
+          <h2>What clients say</h2>
+          <div className="grid3 testimonials__grid">
+            <Quote
+              text="Theatrico took our fuzzy idea and turned it into a knockout event and film."
+              author="Marketing Director, Collier"
+            />
+            <Quote
+              text="Flawless execution. Our audience was blown away."
+              author="Producer, Side Quest"
+            />
+            <Quote
+              text="Fast, clear, and cinematic. Exactly what we needed."
+              author="Head of Comms, CCS"
+            />
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -931,10 +1015,19 @@ function Quote({ text, author }) {
 
 function CTA() {
   return (
-    <section id="contact" className="container cta">
-      <h2>Ready to plan your show?</h2>
-      <p>Tell us your date, venue, and goals. We’ll reply with options and pricing.</p>
-      <a className="btn" href="mailto:hello@theatrico.co?subject=Theatrico Inquiry">Contact Theatrico</a>
+    <section id="contact" className="cta">
+      <div className="container">
+        <div className="section-surface section-surface--cta cta__surface">
+          <span className="grain-overlay" aria-hidden="true"></span>
+          <span className="decor-orb decor-orb--peach cta__orb" aria-hidden="true"></span>
+          <h2>Ready to plan your show?</h2>
+          <p>Tell us your date, venue, and goals. We’ll reply with creative directions, crews, and budgets within 48 hours.</p>
+          <div className="cta__actions">
+            <a className="btn" href="mailto:hello@theatrico.co?subject=Theatrico Inquiry">Contact Theatrico</a>
+            <a className="btn btn--ghost" href="/people">Meet the team</a>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }
