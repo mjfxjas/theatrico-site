@@ -48,7 +48,7 @@ jobs:
           name: dist
           path: dist
 
-      - name: Select target bucket and role
+      - name: Select target bucket, role, and distribution
         run: |
           if [ "${GITHUB_REF}" = "refs/heads/dev" ]; then
             echo "DEST_BUCKET=${{ secrets.DEV_BUCKET }}" >> $GITHUB_ENV

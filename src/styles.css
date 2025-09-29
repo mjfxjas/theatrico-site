@@ -259,6 +259,11 @@ header {
   pointer-events: none;
 }
 
+.site-header--touch {
+  position: relative;
+  top: auto;
+}
+
 .nav {
   display: flex;
   align-items: center;

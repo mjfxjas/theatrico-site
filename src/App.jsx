@@ -86,6 +86,39 @@ function FadeWords({ words, videos, interval = 1000 }) {
   const [hoverSource, setHoverSource] = useState(null)
   const [revealed, setRevealed] = useState(() => new Set()) // indices that have been revealed
   const [autoShow, setAutoShow] = useState(false) // after 3s, show all
+  const [hoverEnabled, setHoverEnabled] = useState(true)
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      setHoverEnabled(false)
+      return () => {}
+    }
+
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+
+    const updateHoverState = (event) => {
+      const enabled = event?.matches ?? false
+      setHoverEnabled(enabled)
+      if (!enabled) {
+        setHoverIndex(null)
+        setHoverSource(null)
+      }
+    }
+
+    updateHoverState(mq)
+
+    if (typeof mq.addEventListener === 'function' && typeof mq.removeEventListener === 'function') {
+      mq.addEventListener('change', updateHoverState)
+      return () => mq.removeEventListener('change', updateHoverState)
+    }
+
+    if (typeof mq.addListener === 'function' && typeof mq.removeListener === 'function') {
+      mq.addListener(updateHoverState)
+      return () => mq.removeListener(updateHoverState)
+    }
+
+    return () => {}
+  }, [])
 
   // Short, 2-sentence descriptions (max 3 lines via CSS clamp)
   const descriptions = [
@@ -120,6 +153,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
             key={i}
             className="hero__matrix-row"
             onMouseEnter={() => {
+              if (!hoverEnabled) return
               setHoverIndex(i)
               setHoverSource('title')
               setRevealed(prev => {
@@ -129,6 +163,7 @@ function FadeWords({ words, videos, interval = 1000 }) {
               })
             }}
             onMouseLeave={() => {
+              if (!hoverEnabled) return
               setHoverIndex(null)
               setHoverSource(null)
             }}
@@ -138,7 +173,9 @@ function FadeWords({ words, videos, interval = 1000 }) {
               <Link
                 to={route}
                 className="hero__matrix-link"
-                onPointerEnter={() => setHoverSource('title')}
+                onPointerEnter={() => {
+                  if (hoverEnabled) setHoverSource('title')
+                }}
                 onFocus={() => {
                   setHoverIndex(i)
                   setHoverSource('title')
@@ -194,7 +231,9 @@ function FadeWords({ words, videos, interval = 1000 }) {
                 }}
                 transition={{ duration: 1.5 * SPEED, ease: 'easeOut', delay: i * 0.12 + 0.1 }}
                 style={{ margin: 0 }}
-                onPointerEnter={() => setHoverSource('paragraph')}
+                onPointerEnter={() => {
+                  if (hoverEnabled) setHoverSource('paragraph')
+                }}
                 onFocus={() => {
                   setHoverIndex(i)
                   setHoverSource('paragraph')
@@ -208,7 +247,9 @@ function FadeWords({ words, videos, interval = 1000 }) {
             <Link
               to={route}
               className="hero__matrix-link"
-              onPointerEnter={() => setHoverSource('video')}
+              onPointerEnter={() => {
+                if (hoverEnabled) setHoverSource('video')
+              }}
               onFocus={() => {
                 setHoverIndex(i)
                 setHoverSource('video')
@@ -372,8 +413,61 @@ export default function App() {
 
 function Header({ onOpenContact }) {
   const [linksRevealed, setLinksRevealed] = useState(false)
+  const [isTouchNav, setIsTouchNav] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      setIsTouchNav(true)
+      setLinksRevealed(false)
+      return () => {}
+    }
+
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+
+    const updateNavMode = (event) => {
+      const canHover = event?.matches ?? false
+      setIsTouchNav(!canHover)
+      if (!canHover) {
+        setLinksRevealed(false)
+      }
+    }
+
+    updateNavMode(mq)
+
+    if (typeof mq.addEventListener === 'function' && typeof mq.removeEventListener === 'function') {
+      mq.addEventListener('change', updateNavMode)
+      return () => mq.removeEventListener('change', updateNavMode)
+    }
+
+    if (typeof mq.addListener === 'function' && typeof mq.removeListener === 'function') {
+      mq.addListener(updateNavMode)
+      return () => mq.removeListener(updateNavMode)
+    }
+
+    return () => {}
+  }, [])
+
+  useEffect(() => {
+    if (!isTouchNav || !linksRevealed) return
+
+    const timeoutId = setTimeout(() => setLinksRevealed(false), 4000)
+    return () => clearTimeout(timeoutId)
+  }, [isTouchNav, linksRevealed])
+
   const revealLinks = () => setLinksRevealed(true)
+  const hideLinks = () => setLinksRevealed(false)
+  const handleNavItemClick = () => {
+    if (isTouchNav) hideLinks()
+  }
+  const handleBrandClick = () => {
+    if (isTouchNav) {
+      setLinksRevealed(prev => !prev)
+    } else {
+      revealLinks()
+    }
+  }
   const expanded = linksRevealed
+  const headerClassName = isTouchNav ? 'site-header site-header--touch' : 'site-header'
   const navLinks = [
     { to: '/theater', label: 'Theater' },
     { to: '/production', label: 'Production' },
@@ -381,7 +475,7 @@ function Header({ onOpenContact }) {
     { to: '/people', label: 'People' },
   ]
   return (
-    <header className="site-header">
+    <header className={headerClassName}>
       <div className="container nav" style={{ position: 'relative' }}>
         <Motion.div
           className="toolbar-expand"
@@ -395,7 +489,7 @@ function Header({ onOpenContact }) {
           style={{ display: 'inline-block', cursor: 'pointer' }}
           onHoverStart={revealLinks}
           onFocus={revealLinks}
-          onClick={revealLinks}
+          onClick={handleBrandClick}
         >
           <NavLink to="/" className="brand" style={{ textDecoration: 'none', color: 'inherit' }}>
             <span className="logo">T</span>
@@ -410,6 +504,7 @@ function Header({ onOpenContact }) {
               to={to}
               className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
               onFocus={revealLinks}
+              onClick={handleNavItemClick}
             >
               {label}
             </NavLink>
@@ -424,6 +519,7 @@ function Header({ onOpenContact }) {
             whileHover={{ scale: 1.08, color: 'var(--text)' }}
             transition={{ duration: 0.4 * SPEED, ease: 'easeOut' }}
             onMouseEnter={revealLinks}
+            onClick={handleNavItemClick}
             onFocus={revealLinks}
           >
             {instagramIcon}
@@ -438,6 +534,7 @@ function Header({ onOpenContact }) {
               to="/login"
               className={({ isActive }) => `btn btn--ghost nav-action-link${isActive ? ' active' : ''}`}
               onFocus={revealLinks}
+              onClick={handleNavItemClick}
             >
               Login
             </NavLink>
@@ -446,7 +543,10 @@ function Header({ onOpenContact }) {
             className="btn"
             whileHover={{ scale: 1.08, color: 'var(--text)' }}
             transition={{ duration: 0.5 * SPEED, ease: 'easeOut' }}
-            onClick={() => onOpenContact && onOpenContact()}
+            onClick={() => {
+              if (onOpenContact) onOpenContact()
+              handleNavItemClick()
+            }}
             onFocus={revealLinks}
             onMouseEnter={revealLinks}
           >
