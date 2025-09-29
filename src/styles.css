@@ -67,6 +67,11 @@ header {
   border-bottom: 1px solid var(--ring);
 }
 
+.site-header--touch {
+  position: relative;
+  top: auto;
+}
+
 .nav {
   display: flex;
   align-items: center;

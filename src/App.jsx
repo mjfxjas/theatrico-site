@@ -454,6 +454,7 @@ function Header({ onOpenContact }) {
     }
   }
   const expanded = linksRevealed
+  const headerClassName = isTouchNav ? 'site-header site-header--touch' : 'site-header'
   const navLinks = [
     { to: '/theater', label: 'Theater' },
     { to: '/production', label: 'Production' },
@@ -461,7 +462,7 @@ function Header({ onOpenContact }) {
     { to: '/people', label: 'People' },
   ]
   return (
-    <header className="site-header">
+    <header className={headerClassName}>
       <div className="container nav" style={{ position: 'relative' }}>
         <Motion.div
           className="toolbar-expand"
