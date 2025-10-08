@@ -1,9 +1,7 @@
 name: CI/CD
 
 on:
-  push:
-    branches: [dev, main]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -60,6 +58,13 @@ jobs:
             echo "DISTRIBUTION_ID=${{ secrets.PROD_DISTRIBUTION_ID }}" >> $GITHUB_ENV
           fi
 
+      - name: Validate AWS configuration
+        run: |
+          if [ -z "${{ secrets.AWS_REGION }}" ]; then
+            echo "Error: AWS_REGION secret not set"
+            exit 1
+          fi
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -68,11 +73,23 @@ jobs:
 
       - name: Sync to S3
         run: |
-          aws s3 sync dist/ "s3://$DEST_BUCKET" --delete
+          set -e
+          if [ -z "$DEST_BUCKET" ]; then
+            echo "Error: DEST_BUCKET not set"
+            exit 1
+          fi
+          aws s3 sync dist/ "s3://$DEST_BUCKET" --delete || {
+            echo "Error: S3 sync failed"
+            exit 1
+          }
 
       - name: Invalidate CloudFront cache
         if: env.DISTRIBUTION_ID != ''
         run: |
+          set -e
           aws cloudfront create-invalidation \
             --distribution-id "$DISTRIBUTION_ID" \
-            --paths '/*'
+            --paths '/*' || {
+            echo "Error: CloudFront invalidation failed"
+            exit 1
+          }
