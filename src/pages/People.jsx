@@ -48,13 +48,9 @@ export default function People() {
         <div className="team-roster">
           {teamMembers.map(({ id, name, title, bio, photo, photoAlt }) => (
             <article key={id} className="team-profile">
-              <div className={`profile-image ${photo ? 'profile-image--has-photo' : ''}`}>
-                {photo ? (
+              <div className={`profile-image${photo ? ' profile-image--has-photo' : ''}`}>
+                {photo && (
                   <img src={photo} alt={photoAlt ?? `${name} portrait`} loading="lazy" />
-                ) : (
-                  <div className="image-placeholder">
-                    <span>Photo</span>
-                  </div>
                 )}
               </div>
               <div className="profile-content">

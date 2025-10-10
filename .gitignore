@@ -11,7 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
-public/media/
+public/media/*
+!public/media/.gitkeep
+!public/media/tivoli/
+!public/media/tivoli/**
 
 # Editor directories and files
 .vscode/*
