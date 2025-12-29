@@ -6,7 +6,8 @@ const navLinks = [
   { label: 'Theater', href: '/' },
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
-  { label: 'Contact', href: 'mailto:marycatherine@theatrico.org' }
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
 const DOCUMENTS = [

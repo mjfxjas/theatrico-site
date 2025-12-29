@@ -5,7 +5,8 @@ const navLinks = [
   { label: 'Theater', href: '/' },
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
-  { label: 'Contact', href: 'mailto:marycatherine@theatrico.org' }
+  { label: 'Technology', href: '/portfolio' },
+  { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
 const teamMembers = [
@@ -25,13 +26,34 @@ const teamMembers = [
   }
 ]
 
+import { useEffect, useRef } from 'react'
+
 export default function People() {
+  const titleRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+        }
+      },
+      { threshold: 0.2 }
+    )
+
+    if (titleRef.current) {
+      observer.observe(titleRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <Layout navLinks={navLinks}>
       <section className="hero hero--compact">
         <div className="hero-copy">
           <p className="hero-eyebrow">leadership / vision / craft</p>
-          <h1>The people behind the theater.</h1>
+          <h1 ref={titleRef} className="scroll-fade">The people behind the theater.</h1>
           <p className="hero-lead">
             Theatrico is built by practitioners who understand that great experiences emerge from deep collaboration, 
             careful preparation, and genuine care for both artists and audiences.
@@ -68,10 +90,10 @@ export default function People() {
       <section className="people-contact">
         <h2>Theater with Us</h2>
         <div className="hero-actions">
-          <a className="button" href="mailto:marycatherine@theatrico.org">
+          <a className="button" href="mailto:jon@theatrico.org">
             Join Our Team
           </a>
-          <a className="button button--outline" href="mailto:marycatherine@theatrico.org">
+          <a className="button button--outline" href="mailto:jon@theatrico.org">
             Collaborate
           </a>
         </div>

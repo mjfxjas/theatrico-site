@@ -6,7 +6,8 @@ const navLinks = [
   { label: 'Theater', href: '#recent-theater' },
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
-  { label: 'Contact', href: 'mailto:marycatherine@theatrico.org' }
+  { label: 'Technology', href: '/portfolio' },
+  { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
 const recentWorks = [
@@ -19,7 +20,7 @@ const recentWorks = [
       { url: 'https://www.wutc.org/podcast/scenic-roots/2023-07-13/theatrico-brings-the-fantasticks-to-chattanoogas-west-village', label: 'Press' },
       { url: 'https://newschannel9.com/this-n-that/recently-on-tnt/the-west-villages-theatrico-presents-the-fantasticks', label: 'Press' }
     ],
-    media: { type: 'video', src: '/media/fantastick.mov', cacheBust: '20241007' }
+    media: { type: 'video', src: '/media/fantastick.mov', poster: '/media/fantastick-poster.jpg' }
   },
   {
     id: 'last-five-years',
@@ -30,7 +31,7 @@ const recentWorks = [
       { url: 'https://newschannel9.com/the-daily-refresh/theatrico-champions-theatres-role-in-promoting-strong-community-bonds', label: 'Press' },
       { url: 'https://www.rachelzatcoff.com/performance-photos?pgid=lzij4kp0-644fa40a-99da-4c25-a248-20940145dc6a', label: 'Rachel Zatcoff' }
     ],
-    media: { type: 'image', src: '/media/last-five-years.jpg' }
+    media: { type: 'image', src: '/media/last-five-years.jpg', srcSet: '/media/last-five-years2.png 2x' }
   },
   {
     id: 'camp-broadway',
@@ -94,32 +95,27 @@ export default function Home() {
             loop
             playsInline
             preload="metadata"
+            poster="/assets/hero_poster.jpg"
           >
-            <source src="/media/theatrico-theater-bg.mov" type="video/quicktime" />
+            <source src="/assets/hero_silent.mp4" type="video/mp4" />
           </video>
         </div>
-        <div className="hero-content hero-content--center">
-          <div className="hero-copy hero-copy--center">
-            <p className="hero-eyebrow hero-eyebrow--center">PRECISION PRODUCTIONS • CHATTANOOGA</p>
-            <h1 id="theater-hero-title">Theater in motion.</h1>
-            <p className="hero-lead">
-              We stage musicals, events, and outdoor spectacles. Every cue, riser, and reveal is choreographed for artists, partners, and the audiences we invite in.
-            </p>
-          </div>
-          <div className="hero-actions hero-actions--anchor">
-            <a className="button" href="mailto:marycatherine@theatrico.org">
-              Start a Project
-            </a>
-            <a className="button button--outline" href="https://www.instagram.com/theatricochatt/" target="_blank" rel="noopener noreferrer">
-              Follow Along
-            </a>
-          </div>
+        <p className="hero-eyebrow hero-eyebrow--center">PRECISION PRODUCTIONS • CHATTANOOGA</p>
+        <div className="hero-actions hero-actions--anchor">
+          <a className="button" href="mailto:jon@theatrico.org">
+            Start a Project
+          </a>
+          <a className="button button--outline" href="https://www.instagram.com/theatricochatt/" target="_blank" rel="noopener noreferrer">
+            Follow Along
+          </a>
         </div>
       </section>
 
       <Section 
         id="recent-theater" 
-        heading="Recent theater productions and events" 
+        heading="RECENT PRODUCTIONS"
+        headingClassName=""
+        subheading="Theater in Motion"
       >
         <div className="section-list">
           {recentWorks.map(({ id, title, venue, description, pressLinks, media }) => {
@@ -134,12 +130,18 @@ export default function Home() {
                 {media && (
                   <div className="work-media" aria-label={`${title} media`}>
                     {media.type === 'image' && (
-                      <img src={mediaSrc} alt={title} loading="lazy" />
+                      <img
+                        src={mediaSrc}
+                        {...(media.srcSet ? { srcSet: media.srcSet } : {})}
+                        alt={title}
+                        loading="lazy"
+                      />
                     )}
                     {media.type === 'video' && (
                       <video
                         controls
                         preload="metadata"
+                        {...(media.poster ? { poster: media.poster } : {})}
                         title={`${title} video`}
                       >
                         <source src={mediaSrc} type="video/mp4" />
@@ -173,29 +175,13 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section
-        id="principles"
-        variant="columns"
-        heading="How we hold a room"
-        subheading="Three commitments shaping every rehearsal, gala, and open-air show."
-      >
-        <div className="section-columns">
-          {principles.map(({ id, title, detail }) => (
-            <article key={id}>
-              <h3>{title}</h3>
-              <p>{detail}</p>
-            </article>
-          ))}
-        </div>
-      </Section>
-
       <section className="home-contact">
         <h2>Let’s build something together.</h2>
         <div className="hero-actions">
-          <a className="button" href="mailto:marycatherine@theatrico.org">
+          <a className="button" href="mailto:jon@theatrico.org">
             Start a Project
           </a>
-          <a className="button button--outline" href="mailto:marycatherine@theatrico.org">
+          <a className="button button--outline" href="mailto:jon@theatrico.org">
             Book a Conversation
           </a>
         </div>

@@ -34,11 +34,10 @@ a {
   text-decoration: none;
 }
 
-.stream-header { display:none; }
 .stream-header {
   padding: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--black);
 }
@@ -48,6 +47,20 @@ a {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 700;
+}
+
+.return-link {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--black);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.return-link:hover {
+  background: var(--black);
+  color: var(--white);
 }
 
 .stream-main {

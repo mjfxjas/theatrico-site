@@ -7,7 +7,8 @@ const navLinks = [
   { label: 'Theater', href: '/' },
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
-  { label: 'Contact', href: 'mailto:marycatherine@theatrico.org' }
+  { label: 'Technology', href: '/portfolio' },
+  { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
 
@@ -27,25 +28,6 @@ const heroHighlights = [
   }
 ]
 
-const services = [
-  {
-    title: 'Narrative Series',
-    detail: 'Multi-episode arcs for renovations, festivals, and seasonal programming with cohesive visual language.'
-  },
-  {
-    title: 'Campaign & Donor Films',
-    detail: 'Mission-forward pieces tailored for boardrooms, galas, and digital launches.'
-  },
-  {
-    title: 'Event & Performance Capture',
-    detail: 'Live shows, rehearsals, and pop-ups filmed with cinematic lighting and spatial sound.'
-  },
-  {
-    title: 'Artist & Partner Profiles',
-    detail: 'Portraits that spotlight collaborators, educators, and community voices.'
-  }
-]
-
 const workItems = [
   {
     heading: 'Collier Construction',
@@ -57,7 +39,8 @@ const workItems = [
       type: 'video',
       src: '/media/mill-town-collier.mov',
       mimeType: 'video/quicktime',
-      title: 'Collier Construction film'
+      title: 'Collier Construction film',
+      poster: '/media/mill-town-collier-poster.jpg'
     }
   },
   {
@@ -70,7 +53,8 @@ const workItems = [
       type: 'video',
       src: '/media/hk-mill-town.mov',
       mimeType: 'video/quicktime',
-      title: 'Hefferlin Kronenberg Architects film'
+      title: 'Hefferlin Kronenberg Architects film',
+      poster: '/media/hk-mill-town-poster.jpg'
     }
   },
   {
@@ -165,15 +149,16 @@ export default function Film() {
             loop
             playsInline
             preload="metadata"
+            poster="/assets/film_hero_poster.jpg"
           >
-            <source src="/media/theatrico-film-bg.mov" type="video/quicktime" />
+            <source src="/assets/film_hero_silent.mp4" type="video/mp4" />
           </video>
         </div>
       </section>
 
       <section className="film-intro">
         <div className="film-intro-content">
-          <h1>Cinematic Storytelling</h1>
+          <h1 className="scroll-fade">Cinematic Storytelling</h1>
           <p className="hero-lead">
             We build cinematic stories for businesses, cultural institutions, and events that deserve to be remembered.
           </p>
@@ -192,21 +177,6 @@ export default function Film() {
           ))}
         </div>
       </section>
-
-      <Section 
-        id="services" 
-        heading="Film offerings" 
-        subheading="Video strategy built for cultural venues, event brands, and place-based stories."
-      >
-        <div className="film-service-grid">
-          {services.map(({ title, detail }) => (
-            <article key={title}>
-              <h3>{title}</h3>
-              <p>{detail}</p>
-            </article>
-          ))}
-        </div>
-      </Section>
 
       <Section 
         id="work" 

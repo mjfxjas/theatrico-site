@@ -61,7 +61,7 @@ const Navigation = ({ navLinks = [], variant = 'default' }) => {
   const renderLink = (label, href) => {
     if (href.startsWith('/')) {
       return (
-        <Link to={href} onClick={closeNav}>
+        <Link to={href} onClick={() => { closeNav(); window.scrollTo(0, 0); }}>
           {label}
         </Link>
       )

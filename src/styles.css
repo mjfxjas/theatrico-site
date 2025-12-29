@@ -274,6 +274,30 @@ main .theater-hero {
   max-width: 46ch;
 }
 
+@keyframes text-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+:is(h1, h2, h3, h4, h5, h6, .hero-eyebrow, .button, .button--outline, .text-button, .stack-pill, .stack-button, .nav-link, .press-link, .profile-name, .profile-title, .section-heading span, .hero-actions a) {
+  opacity: 0;
+  animation: text-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--motion-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(h1, h2, h3, h4, h5, h6, .hero-eyebrow, .button, .button--outline, .text-button, .stack-pill, .stack-button, .nav-link, .press-link, .profile-name, .profile-title, .section-heading span, .hero-actions a) {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 .hero-eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -501,6 +525,7 @@ main .theater-hero {
   margin-top: 0;
   position: relative;
   min-height: clamp(480px, 100vh, 900px);
+  color: var(--ivory);
 }
 
 .film-hero::before,
@@ -527,6 +552,23 @@ main .theater-hero {
   border-radius: 0;
   box-shadow: none;
   transform: none;
+}
+
+.film-hero .hero-copy,
+.theater-hero .hero-copy,
+.film-hero .hero-copy h1,
+.theater-hero .hero-copy h1,
+.film-hero .hero-lead,
+.theater-hero .hero-lead,
+.film-hero .hero-eyebrow,
+.theater-hero .hero-eyebrow {
+  color: var(--ivory);
+}
+
+.film-hero .button--outline,
+.theater-hero .button--outline {
+  border-color: rgba(248, 244, 234, 0.8);
+  color: var(--ivory);
 }
 
 .hero-content--center {
@@ -995,6 +1037,17 @@ main .theater-hero {
   box-shadow: 0 24px 48px -36px rgba(0, 0, 0, 0.3);
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease, transform 0.45s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .profile-image {
   flex: 0 0 clamp(84px, 12vw, 112px);
 }
@@ -1087,13 +1140,15 @@ main .theater-hero {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border 0.2s ease, transform 0.18s ease, letter-spacing 0.18s ease;
 }
 
 .button:hover,
 .button:focus {
   background: transparent;
   color: var(--stroke);
+  transform: translateY(-2px) scale(1.01);
+  letter-spacing: 0.12em;
 }
 
 .button--outline {
@@ -1105,6 +1160,10 @@ main .theater-hero {
 .button--outline:focus {
   background: var(--stroke);
   color: var(--ivory);
+}
+
+.button:active {
+  transform: translateY(0) scale(0.99);
 }
 
 .film-service-grid {

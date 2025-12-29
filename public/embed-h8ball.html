@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+:root {
+  --bg: #0d1021;
+  --ball: #0a0b12;
+  --window: #12204c;
+  --window2: #1c2e66;
+  --text: #cde7ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 20% 20%, rgba(93, 186, 255, 0.08), transparent 35%), linear-gradient(140deg, var(--bg) 0%, #0f1a2f 100%);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+}
+.ball {
+  position: relative;
+  width: 320px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 45%), var(--ball);
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.08), 0 20px 50px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+}
+.ball::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 60%);
+  opacity: 0.9;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+}
+.window {
+  position: absolute;
+  inset: 28%;
+  border-radius: 26px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12), transparent 70%), linear-gradient(160deg, var(--window2), var(--window));
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75), 0 0 16px rgba(77, 176, 255, 0.32);
+  display: grid;
+  place-items: center;
+}
+.triangle {
+  position: absolute;
+  width: 70%;
+  aspect-ratio: 1;
+  background: linear-gradient(180deg, rgba(77, 176, 255, 0.9), rgba(18, 32, 76, 0.95));
+  clip-path: polygon(50% 10%, 95% 90%, 5% 90%);
+  box-shadow: 0 0 24px rgba(77, 176, 255, 0.4);
+}
+.answer {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #e9f5ff;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+  max-width: 80%;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.answer.hidden { opacity: 0; }
+.answer.revealing { animation: fadeIn 1.2s ease forwards; }
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 0.3; }
+  100% { opacity: 1; transform: scale(1); }
+}
+.shake { animation: shake 0.5s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-5px) rotate(-2deg); }
+  40% { transform: translateX(6px) rotate(2deg); }
+  60% { transform: translateX(-4px) rotate(-1.5deg); }
+  80% { transform: translateX(3px) rotate(1.5deg); }
+}
+</style>
+</head>
+<body>
+<div class="ball" onclick="shake()">
+  <div class="window">
+    <div class="triangle"></div>
+    <div class="answer" id="answer">Ask a question</div>
+  </div>
+</div>
+<script>
+const responses = ["U STINK", "NO CHANCE", "HELL NO!", "TRY AGAIN LOSER", "WHO ASKED?", "STOP ASKING", "GET REAL", "NOPE FOREVER", "ASK SOMEONE SMARTER", "FAIL CITY", "DENIED", "SKIBIDI TOILET", "NO RIZZ", "GET CLIPPED", "UR CHEEKS KID"];
+const ball = document.querySelector('.ball');
+const answer = document.getElementById('answer');
+
+function shake() {
+  ball.classList.remove('shake');
+  void ball.offsetWidth;
+  ball.classList.add('shake');
+  answer.classList.remove('revealing');
+  answer.classList.add('hidden');
+  setTimeout(() => {
+    answer.textContent = responses[Math.floor(Math.random() * responses.length)];
+    answer.classList.remove('hidden');
+    answer.classList.add('revealing');
+  }, 400);
+}
+</script>
+</body>
+</html>

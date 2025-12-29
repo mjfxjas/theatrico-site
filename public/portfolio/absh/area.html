@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Service Area - Andy Bond Signature Homes</title>
+  <meta name="description" content="Areas served by Andy Bond in Chattanooga, TN and GA." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="./index.html" class="brand">
+      <span class="brand-mark">AB</span>
+      <div class="brand-copy">
+        <span class="brand-name">Andy Bond</span>
+        <span class="brand-sub">Signature Homes</span>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./area.html">Area</a>
+      <a href="./index.html#services">Services</a>
+      <a href="./index.html#contact">Contact</a>
+    </nav>
+    <a class="pill-btn" href="./index.html#contact">Get in touch</a>
+  </header>
+
+  <main style="scroll-snap-type: none; overflow-y: auto;">
+    <section style="min-height: auto; scroll-snap-align: none; padding: 6rem 0 2rem;">
+      <div class="section-container">
+        <div class="area-split">
+          <div class="area-text">
+            <div class="area-text-card">
+              <h2 style="color: var(--accent-strong); font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem;">Deep Roots in Chattanooga</h2>
+              <p style="color: var(--muted); line-height: 1.7; margin: 0;">From Signal Mountain to Lookout Mountain, North Shore to Hixson—I know this market. Twenty years of building, renovating, and selling properties across Tennessee and Georgia means I understand what makes each neighborhood tick.</p>
+            </div>
+          </div>
+          <div class="area-map">
+            <div id="map" class="map-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+    <div class="brand">
+      <span class="brand-mark">AB</span>
+      <div class="brand-copy">
+        <span class="brand-name">Andy Bond</span>
+        <span class="brand-sub">Signature Homes</span>
+      </div>
+    </div>
+    <p class="muted">3114 Colyar Dr. - Chattanooga, TN 37404 - <a href="tel:14239021322">423-902-1322</a> - <a href="https://andybondsignaturehomes.com">andybondsignaturehomes.com</a></p>
+    </div>
+  </footer>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWpmeGphcyIsImEiOiJjbWlwZThjaGcwMDEwM2dxMHNseGJiZWV0In0.O92-6fzIpmZM64NIDEptMA';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [-85.3097, 35.0456],
+      zoom: 11
+    });
+
+    const markers = [
+      { lng: -85.3097, lat: 35.0456, type: 'office', title: 'Office Location', description: '3114 Colyar Dr, Chattanooga, TN' }
+    ];
+
+    for (let i = 0; i < 20; i++) {
+      markers.push({
+        lng: -85.3097 + (Math.random() - 0.5) * 0.15,
+        lat: 35.0456 + (Math.random() - 0.5) * 0.15,
+        type: 'sold',
+        title: 'Sold Property',
+        description: `Closed ${2023 + Math.floor(Math.random() * 2)}`
+      });
+    }
+
+    const savedListings = JSON.parse(localStorage.getItem('listings') || '[]');
+    markers.push(...savedListings);
+
+    markers.forEach(marker => {
+      const el = document.createElement('div');
+      
+      if (marker.type === 'office') {
+        el.style.width = '30px';
+        el.style.height = '30px';
+        el.style.borderRadius = '50%';
+        el.style.background = '#d4a574';
+        el.style.border = '3px solid #fff';
+        el.style.boxShadow = '0 0 10px rgba(212, 165, 116, 0.6)';
+      } else if (marker.type === 'sold') {
+        el.innerHTML = '🏠';
+        el.style.fontSize = '20px';
+        el.style.filter = 'grayscale(0.3)';
+      } else if (marker.type === 'forsale') {
+        el.innerHTML = '🏡';
+        el.style.fontSize = '24px';
+      } else if (marker.type === 'landmark') {
+        el.innerHTML = '📍';
+        el.style.fontSize = '24px';
+      }
+      
+      el.style.cursor = 'pointer';
+
+      const popupContent = `
+        <h3 style="margin:0 0 0.5rem;font-family:Playfair Display,serif;">${marker.title}</h3>
+        <p style="margin:0 0 0.5rem;">${marker.description}</p>
+        ${marker.url ? `<a href="${marker.url}" target="_blank" style="color:#c9a961;font-weight:600;">View Listing →</a>` : ''}
+      `;
+
+      new mapboxgl.Marker(el)
+        .setLngLat([marker.lng, marker.lat])
+        .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent))
+        .addTo(map);
+    });
+  </script>
+</body>
+</html>

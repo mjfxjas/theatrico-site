@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sky Blocks Run</title>
+  <style>
+    :root {
+      --bg: #0d1021;
+      --bg2: #111a34;
+      --fg: #e8f2ff;
+      --accent: #6cf0c2;
+      --danger: #ff7b7b;
+      --move: #6db7ff;
+      --star: #ffd166;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 20% 20%, rgba(108, 240, 194, 0.08), transparent 35%),
+        radial-gradient(circle at 80% 10%, rgba(109, 183, 255, 0.08), transparent 35%),
+        linear-gradient(140deg, var(--bg) 0%, var(--bg2) 100%);
+      color: var(--fg);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    .wrap {
+      text-align: center;
+      padding: 0.75rem;
+      max-width: 420px;
+    }
+    h1 { margin: 0 0 0.5rem; letter-spacing: 0.05em; }
+    p { margin: 0.25rem 0; opacity: 0.8; }
+    canvas {
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      touch-action: none;
+    }
+    .legend {
+      display: flex;
+      gap: 0.5rem 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .swatch {
+      width: 16px; height: 16px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .mobile-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .control-btn {
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(108, 240, 194, 0.4);
+      border-radius: 12px;
+      background: rgba(108, 240, 194, 0.08);
+      color: var(--fg);
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+    .control-btn:active {
+      transform: scale(0.95);
+      background: rgba(108, 240, 194, 0.15);
+    }
+    .control-btn.jump {
+      width: 150px;
+    }
+    @media (min-width: 768px) {
+      .mobile-controls { display: none; }
+    }
+    .easy-mode {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 123, 123, 0.95);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid #ff4757;
+      cursor: pointer;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+      display: none;
+      transition: transform 0.2s;
+    }
+    .easy-mode:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+    .easy-mode.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="easyBtn" class="easy-mode" onclick="easyMode = true; deathCount = 0; this.classList.remove('show'); reset();">Too hard?<br>CLICK HERE</div>
+  <div class="wrap">
+    <h1>Sky Blocks Run</h1>
+    <p>Reach the star at the top. 10 levels of blocks: solid, crumbling, moving.</p>
+    <p>Controls: A / D or ⬅️ ➡️ to move, W / Space / ⬆️ to jump. R to restart.</p>
+    <canvas id="game" width="360" height="560"></canvas>
+    <div class="legend">
+      <span class="chip"><span class="swatch" style="background:#59d4a4"></span>Solid</span>
+      <span class="chip"><span class="swatch" style="background:#ff7b7b"></span>Crumbling</span>
+      <span class="chip"><span class="swatch" style="background:#6db7ff"></span>Moving</span>
+      <span class="chip"><span class="swatch" style="background:#ffd166"></span>Star</span>
+    </div>
+    <div class="mobile-controls">
+      <button class="control-btn" data-left>⬅️</button>
+      <button class="control-btn jump" data-jump>JUMP</button>
+      <button class="control-btn" data-right>➡️</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const keys = new Set();
+    const baseGravity = 0.55;
+    const moveSpeed = 3.2;
+    const jumpVel = -11;
+
+    let player, platforms, state, lastTime, touchLeft, touchRight, obstacles, powerups, camera, highestY, nextPlatformY, deathCount, easyMode, aliens, nextAlienY, godMode;
+    touchLeft = touchRight = false;
+    camera = 0;
+    deathCount = 0;
+    easyMode = false;
+    godMode = false;
+
+    function generatePlatform(y) {
+      const height = (680 - y) / 10;
+      const difficulty = Math.min(10, height / 500);
+      let platformWidth;
+      if (height < 400) {
+        platformWidth = Math.max(40, 60 - difficulty * 3.5);
+      } else {
+        const extraDifficulty = (height - 400) / 100;
+        platformWidth = Math.max(30, 46 - extraDifficulty * 5);
+      }
+      const platformHeight = 18;
+      
+      const rand = Math.random();
+      const crumbleChance = Math.min(0.35, 0.18 + difficulty * 0.02);
+      const movingChance = Math.min(0.35, 0.15 + difficulty * 0.02);
+      
+      let kind = "solid";
+      if (rand < movingChance) kind = "moving";
+      else if (rand < movingChance + crumbleChance) kind = "crumble";
+      
+      const x = Math.random() * (W - platformWidth - 40) + 20;
+      
+      return {
+        x, y, w: platformWidth, h: platformHeight,
+        type: kind,
+        dir: Math.random() > 0.5 ? 1 : -1,
+        range: 40 + Math.random() * 30 + difficulty * 5,
+        origin: x,
+        timer: 0,
+        gone: false,
+        vx: 0,
+        speed: 80
+      };
+    }
+
+    function generateObstacle(y) {
+      return {
+        x: Math.random() * (W - 40) + 20,
+        y,
+        w: 30,
+        h: 20
+      };
+    }
+
+    function generateAlien(y) {
+      return {
+        x: Math.random() * (W - 50) + 25,
+        y,
+        w: 40,
+        h: 40,
+        vx: (Math.random() - 0.5) * 2
+      };
+    }
+
+    function generatePowerup(y) {
+      const rand = Math.random();
+      let type;
+      if (rand < 0.25) type = "speed";
+      else if (rand < 0.5) type = "doublejump";
+      else if (rand < 0.75) type = "shoes";
+      else type = "parachute";
+      return {
+        x: Math.random() * (W - 30) + 15,
+        y,
+        w: 24,
+        h: 24,
+        type,
+        collected: false
+      };
+    }
+
+    function reset() {
+      player = { 
+        x: W / 2 - 15, y: 642, w: 30, h: 38, 
+        vx: 0, vy: 0, onGround: false, platform: null,
+        speedBoost: 0, doubleJumpCharges: 0, hasShoes: false,
+        hasParachute: false, parachuteActive: false, fallStartY: 642
+      };
+      platforms = [{ x: 0, y: 680, w: W, h: 40, type: "solid", timer: 0, gone: false }];
+      obstacles = [];
+      powerups = [];
+      aliens = [];
+      camera = 200;
+      highestY = 680;
+      nextPlatformY = 640;
+      nextAlienY = -7320;
+      state = "play";
+      lastTime = performance.now();
+      
+      for (let i = 0; i < 50; i++) {
+        nextPlatformY -= 40 + Math.random() * 20;
+        platforms.push(generatePlatform(nextPlatformY));
+        if (!easyMode && Math.random() < 0.3) obstacles.push(generateObstacle(nextPlatformY - 30));
+        if (Math.random() < 0.1) powerups.push(generatePowerup(nextPlatformY - 30));
+      }
+    }
+
+    function handleInput() {
+      const speed = player.speedBoost > 0 ? moveSpeed * 1.5 : moveSpeed;
+      if (keys.has("ArrowLeft") || keys.has("a") || touchLeft) player.vx = -speed;
+      else if (keys.has("ArrowRight") || keys.has("d") || touchRight) player.vx = speed;
+      else player.vx = 0;
+    }
+
+    function jump() {
+      if (player.onGround) {
+        player.vy = jumpVel;
+        player.onGround = false;
+      } else if (player.doubleJumpCharges > 0) {
+        player.vy = jumpVel;
+        player.doubleJumpCharges--;
+      }
+    }
+
+    function physics(dt) {
+      const dtSec = dt ? dt * 0.001 : 0.016;
+      if (player.speedBoost > 0) player.speedBoost -= dt;
+      
+      const height = (680 - player.y) / 10;
+      let gravity = baseGravity;
+      if (height >= 400) {
+        const gravityReduction = Math.min(1, (height - 400) / 200);
+        gravity = baseGravity * (1 - gravityReduction);
+      }
+      
+      if (player.onGround || player.vy < 0) {
+        player.fallStartY = player.y;
+        player.parachuteActive = false;
+      } else if (player.hasParachute && !player.parachuteActive && player.y - player.fallStartY > 100) {
+        player.parachuteActive = true;
+      }
+      
+      if (player.parachuteActive) {
+        player.vy = Math.min(player.vy, 2);
+      }
+      
+      player.vy += gravity;
+      player.y += player.vy;
+      player.x += player.vx;
+      player.x = Math.max(0, Math.min(W - player.w, player.x));
+
+      if (player.y < highestY) {
+        highestY = player.y;
+      }
+
+      camera = player.y - H / 3;
+
+      const currentHeight = (680 - camera) / 10;
+      
+      if (currentHeight < 800) {
+        while (nextPlatformY > camera - H) {
+          nextPlatformY -= 40 + Math.random() * 20;
+          platforms.push(generatePlatform(nextPlatformY));
+          if (!easyMode && Math.random() < 0.3) obstacles.push(generateObstacle(nextPlatformY - 30));
+          if (Math.random() < 0.1) powerups.push(generatePowerup(nextPlatformY - 30));
+        }
+      } else {
+        while (nextAlienY > camera - H) {
+          nextAlienY -= 60 + Math.random() * 40;
+          if (!easyMode) aliens.push(generateAlien(nextAlienY));
+        }
+      }
+
+      platforms = platforms.filter(p => p.y < camera + H + 100);
+      obstacles = obstacles.filter(o => o.y < camera + H + 100);
+      powerups = powerups.filter(p => p.y < camera + H + 100);
+      aliens = aliens.filter(a => a.y < camera + H + 100);
+      
+      for (const alien of aliens) {
+        alien.x += alien.vx;
+        if (alien.x < 0 || alien.x > W - alien.w) alien.vx *= -1;
+      }
+
+      player.onGround = false;
+      player.platform = null;
+      
+      for (const p of platforms) {
+        if (p.gone) continue;
+        if (p.type === "moving") {
+          p.vx = p.speed * dtSec * p.dir;
+          p.x += p.vx;
+          
+          if (p.x < 10 || p.x > W - p.w - 10) {
+            p.dir *= -1;
+            p.x = Math.max(10, Math.min(W - p.w - 10, p.x));
+          } else if (Math.abs(p.x - p.origin) > p.range) {
+            p.dir *= -1;
+          }
+        }
+
+        if (
+          player.vy >= 0 &&
+          player.x + player.w > p.x &&
+          player.x < p.x + p.w &&
+          player.y + player.h >= p.y &&
+          player.y + player.h <= p.y + p.h + player.vy + 2
+        ) {
+          player.y = p.y - player.h;
+          player.vy = 0;
+          player.onGround = true;
+          player.platform = p;
+          
+          if (p.type === "crumble") {
+            p.timer += dt;
+            const difficulty = Math.min(10, Math.abs(player.y) / 500);
+            const crumbleTime = Math.max(300, 1000 - difficulty * 50);
+            if (p.timer > crumbleTime) p.gone = true;
+          }
+        }
+      }
+      
+      if (player.platform && player.platform.type === "moving") {
+        player.x = Math.max(0, Math.min(W - player.w, player.x + player.platform.vx));
+      }
+
+      for (const obs of obstacles) {
+        if (
+          player.x + player.w > obs.x &&
+          player.x < obs.x + obs.w &&
+          player.y + player.h > obs.y &&
+          player.y < obs.y + obs.h
+        ) {
+          if (godMode) continue;
+          if (player.hasShoes) {
+            player.hasShoes = false;
+          } else {
+            deathCount++;
+            if (deathCount >= 3) document.getElementById('easyBtn').classList.add('show');
+            reset();
+            return;
+          }
+        }
+      }
+
+      for (const pup of powerups) {
+        if (pup.collected) continue;
+        if (
+          player.x + player.w > pup.x &&
+          player.x < pup.x + pup.w &&
+          player.y + player.h > pup.y &&
+          player.y < pup.y + pup.h
+        ) {
+          pup.collected = true;
+          if (pup.type === "speed") player.speedBoost = 5000;
+          else if (pup.type === "doublejump") player.doubleJumpCharges++;
+          else if (pup.type === "shoes") player.hasShoes = true;
+          else if (pup.type === "parachute") player.hasParachute = true;
+        }
+      }
+      
+      for (const alien of aliens) {
+        if (
+          player.x + player.w > alien.x &&
+          player.x < alien.x + alien.w &&
+          player.y + player.h > alien.y &&
+          player.y < alien.y + alien.h
+        ) {
+          if (godMode) continue;
+          if (player.hasShoes) {
+            player.hasShoes = false;
+          } else {
+            deathCount++;
+            if (deathCount >= 3) document.getElementById('easyBtn').classList.add('show');
+            reset();
+            return;
+          }
+        }
+      }
+
+      if (!godMode && (player.y > camera + H + 100 || height < -10)) {
+        deathCount++;
+        if (deathCount >= 3) document.getElementById('easyBtn').classList.add('show');
+        reset();
+      }
+    }
+
+    function drawPlayer() {
+      const screenY = player.y - camera;
+      if (player.parachuteActive) {
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(player.x + player.w / 2, screenY - 15, 20, 0, Math.PI, true);
+        ctx.fill();
+        ctx.strokeStyle = "#cccccc";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(player.x + player.w / 2 - 15, screenY - 15);
+        ctx.lineTo(player.x + 5, screenY);
+        ctx.moveTo(player.x + player.w / 2, screenY - 25);
+        ctx.lineTo(player.x + player.w / 2, screenY);
+        ctx.moveTo(player.x + player.w / 2 + 15, screenY - 15);
+        ctx.lineTo(player.x + player.w - 5, screenY);
+        ctx.stroke();
+      }
+      if (player.hasShoes) {
+        ctx.fillStyle = "#ff0000";
+        ctx.fillRect(player.x + 2, screenY + player.h, 10, 6);
+        ctx.fillRect(player.x + player.w - 12, screenY + player.h, 10, 6);
+      }
+      ctx.fillStyle = "#e26df1";
+      ctx.fillRect(player.x, screenY, player.w, player.h);
+      ctx.fillStyle = "#1a0f2b";
+      ctx.fillRect(player.x + 6, screenY + 10, 6, 6);
+      ctx.fillRect(player.x + player.w - 12, screenY + 10, 6, 6);
+    }
+
+    function drawPlatforms() {
+      for (const p of platforms) {
+        if (p.gone) continue;
+        const screenY = p.y - camera;
+        if (p.type === "solid") ctx.fillStyle = "#59d4a4";
+        else if (p.type === "crumble") ctx.fillStyle = "#ff7b7b";
+        else ctx.fillStyle = "#6db7ff";
+        ctx.fillRect(p.x, screenY, p.w, p.h);
+      }
+    }
+
+
+
+    function render() {
+      const height = Math.floor((680 - player.y) / 10);
+      const darkness = Math.min(1, height / 400);
+      const skyBlue = Math.floor(135 * (1 - darkness));
+      const skyGreen = Math.floor(206 * (1 - darkness));
+      const skyRed = Math.floor(235 * (1 - darkness));
+      
+      const gradient = ctx.createLinearGradient(0, 0, 0, H);
+      gradient.addColorStop(0, `rgba(${skyRed}, ${skyGreen}, ${skyBlue}, 0.5)`);
+      gradient.addColorStop(1, `rgba(${Math.floor(skyRed * 0.6)}, ${Math.floor(skyGreen * 0.6)}, ${Math.floor(skyBlue * 0.8)}, 0.5)`);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, W, H);
+      
+      if (darkness > 0.3) {
+        ctx.fillStyle = "#ffffff";
+        for (let i = 0; i < 50; i++) {
+          const starX = (i * 73) % W;
+          const starY = (i * 97) % H;
+          const starSize = (i % 3) + 1;
+          ctx.fillRect(starX, starY, starSize, starSize);
+        }
+      }
+      drawPlatforms();
+      drawObstacles();
+      drawPowerups();
+      drawAliens();
+      drawPlayer();
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+      ctx.fillRect(W - 60, 10, 50, H - 20);
+      
+      ctx.fillStyle = "#6cf0c2";
+      const meterHeight = Math.min(H - 40, height * 2);
+      ctx.fillRect(W - 55, H - 15 - meterHeight, 40, meterHeight);
+      
+      ctx.fillStyle = "#fff";
+      ctx.font = "14px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(`${height}m`, W - 35, 30);
+      
+      ctx.textAlign = "left";
+      if (player.speedBoost > 0) {
+        ctx.fillStyle = "#6db7ff";
+        ctx.fillText("⚡ SPEED", 15, 25);
+      }
+      if (player.doubleJumpCharges > 0) {
+        ctx.fillStyle = "#6cf0c2";
+        ctx.fillText(`⬆️ x${player.doubleJumpCharges}`, 15, player.speedBoost > 0 ? 45 : 25);
+      }
+      if (player.hasShoes) {
+        ctx.fillStyle = "#ff0000";
+        let yPos = 25;
+        if (player.speedBoost > 0) yPos += 20;
+        if (player.doubleJumpCharges > 0) yPos += 20;
+        ctx.fillText("👟 SHOES", 15, yPos);
+      }
+      if (player.hasParachute) {
+        ctx.fillStyle = "#ffffff";
+        let yPos = 25;
+        if (player.speedBoost > 0) yPos += 20;
+        if (player.doubleJumpCharges > 0) yPos += 20;
+        if (player.hasShoes) yPos += 20;
+        ctx.fillText("🪂 CHUTE", 15, yPos);
+      }
+      if (godMode) {
+        ctx.fillStyle = "#ffd700";
+        ctx.fillText("⭐ GOD MODE", W - 100, H - 15);
+      }
+    }
+
+    function drawObstacles() {
+      ctx.fillStyle = "#ff4757";
+      for (const obs of obstacles) {
+        const screenY = obs.y - camera;
+        ctx.beginPath();
+        ctx.moveTo(obs.x, screenY + obs.h);
+        ctx.lineTo(obs.x + obs.w / 2, screenY);
+        ctx.lineTo(obs.x + obs.w, screenY + obs.h);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    function drawPowerups() {
+      for (const pup of powerups) {
+        if (pup.collected) continue;
+        const screenY = pup.y - camera;
+        if (pup.type === "speed") {
+          ctx.fillStyle = "#6db7ff";
+          ctx.fillRect(pup.x, screenY, pup.w, pup.h);
+          ctx.fillStyle = "#fff";
+          ctx.font = "16px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("⚡", pup.x + pup.w / 2, screenY + pup.h / 2 + 6);
+        } else if (pup.type === "doublejump") {
+          ctx.fillStyle = "#6cf0c2";
+          ctx.fillRect(pup.x, screenY, pup.w, pup.h);
+          ctx.fillStyle = "#fff";
+          ctx.font = "16px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("⬆️", pup.x + pup.w / 2, screenY + pup.h / 2 + 6);
+        } else if (pup.type === "shoes") {
+          ctx.fillStyle = "#ff0000";
+          ctx.fillRect(pup.x, screenY, pup.w, pup.h);
+          ctx.fillStyle = "#fff";
+          ctx.font = "16px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("👟", pup.x + pup.w / 2, screenY + pup.h / 2 + 6);
+        } else if (pup.type === "parachute") {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(pup.x, screenY, pup.w, pup.h);
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("🪂", pup.x + pup.w / 2, screenY + pup.h / 2 + 6);
+        }
+      }
+    }
+
+    function drawAliens() {
+      for (const alien of aliens) {
+        const screenY = alien.y - camera;
+        ctx.fillStyle = "#00ff00";
+        ctx.fillRect(alien.x, screenY, alien.w, alien.h);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(alien.x + 8, screenY + 10, 8, 8);
+        ctx.fillRect(alien.x + 24, screenY + 10, 8, 8);
+        ctx.fillRect(alien.x + 10, screenY + 25, 20, 5);
+      }
+    }
+
+    function loop(time) {
+      const dt = time - lastTime;
+      lastTime = time;
+      handleInput();
+      if (state === "play") physics(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      keys.add(e.key);
+      if (["ArrowUp", "w", " ", "Spacebar"].includes(e.key)) jump();
+      if (e.key === "r" || e.key === "R") reset();
+      if (e.key === "p" || e.key === "P") player.hasParachute = true;
+      if (e.key === "o" || e.key === "O") player.hasShoes = true;
+      if (e.key === "i" || e.key === "I") player.doubleJumpCharges++;
+      if (e.key === "k" || e.key === "K") {
+        godMode = !godMode;
+        if (godMode) {
+          player.hasParachute = true;
+          player.hasShoes = true;
+          player.doubleJumpCharges = 999;
+          player.speedBoost = 999999;
+        }
+      }
+    });
+    window.addEventListener("keyup", (e) => keys.delete(e.key));
+
+    const leftBtn = document.querySelector("[data-left]");
+    const rightBtn = document.querySelector("[data-right]");
+    const jumpBtn = document.querySelector("[data-jump]");
+
+    leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); touchLeft = true; });
+    leftBtn.addEventListener("touchend", () => touchLeft = false);
+    rightBtn.addEventListener("touchstart", (e) => { e.preventDefault(); touchRight = true; });
+    rightBtn.addEventListener("touchend", () => touchRight = false);
+    jumpBtn.addEventListener("touchstart", (e) => { e.preventDefault(); jump(); });
+    
+    leftBtn.addEventListener("mousedown", () => touchLeft = true);
+    leftBtn.addEventListener("mouseup", () => touchLeft = false);
+    rightBtn.addEventListener("mousedown", () => touchRight = true);
+    rightBtn.addEventListener("mouseup", () => touchRight = false);
+    jumpBtn.addEventListener("click", jump);
+
+    reset();
+    loop(performance.now());
+  </script>
+</body>
+</html>

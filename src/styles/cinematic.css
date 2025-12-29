@@ -1,5 +1,7 @@
 /* Cinematic Design System - Brooklyn Hip Aesthetic */
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
+
 :root {
   --primary-black: #1a1a1a;
   --warm-white: #fafafa;
@@ -81,6 +83,89 @@ h3 {
   margin-bottom: 1.5rem;
 }
 
+.theater-hero .hero-eyebrow {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+.theater-hero .hero-content {
+  position: absolute;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+
+.theater-hero h1 {
+  opacity: 0;
+  animation: fadeSlideInH1 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards, fadeSlideOutH1 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 2.5s, 5.5s;
+}
+
+@keyframes fadeSlideInH1 {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideOutH1 {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes fadeSlideInH2 {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideInH3 {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero--compact h1 {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.hero--compact h1.animate-in {
+  animation: fadeSlideInH3 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.theater-hero .hero-actions {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
 .hero-lead {
   font-size: 1.25rem;
   line-height: 1.55;
@@ -155,13 +240,53 @@ h3 {
 }
 
 .section-heading h2 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.section-heading h2.animate-in {
+  animation: fadeSlideInH2 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+h2 {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+h2.animate-in {
+  animation: fadeSlideInH2 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+h3 {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+h3.animate-in {
+  animation: fadeSlideInH3 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .section-heading p {
   font-size: 1.125rem;
   color: var(--muted-gray);
   line-height: 1.55;
+  opacity: 1;
+}
+
+.section-subheading-h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 200;
+  margin-bottom: 1rem;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Cards & Articles */
@@ -196,10 +321,17 @@ article:hover {
 
 /* Contact Sections */
 .section--contact {
-  background: var(--primary-black);
-  color: white;
-  border-radius: 20px;
-  margin: 4rem 2rem;
+  background: transparent;
+  color: inherit;
+  border-radius: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.section--contact .hero-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .contact-card {
