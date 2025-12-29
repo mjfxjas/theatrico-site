@@ -35,8 +35,9 @@ const projects = [
     id: 'websites',
     title: 'Theatrico',
     description: 'Cinematic marketing site with video backgrounds.',
-    logo: 'THEATRICO',
-    logoType: 'text',
+    logo: '/portfolio/tco_logo.png',
+    logoType: 'image',
+    logoSize: 'large',
     stack: ['React + Vite', 'Video optimization', 'CloudFront'],
     link: 'https://theatrico.org'
   },
