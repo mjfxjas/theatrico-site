@@ -1,0 +1,31 @@
+{
+  "books": [
+    {
+      "id": "philosophy",
+      "title": "Introduction to Philosophy",
+      "author": "Nathan Smith",
+      "publisher": "OpenStax",
+      "cover": "thumbnails/philosophy.jpg",
+      "description": "Explore fundamental questions about existence, knowledge, values, reason, mind, and language.",
+      "subjects": ["Philosophy", "Ethics", "Metaphysics"]
+    },
+    {
+      "id": "history",
+      "title": "World History Volume 1",
+      "author": "Ann Kordas et al.",
+      "publisher": "OpenStax",
+      "cover": "thumbnails/world-history-vol1.jpg",
+      "description": "From prehistory to 1500 CE: ancient civilizations, classical empires, and medieval societies.",
+      "subjects": ["History", "World History", "Ancient History"]
+    },
+    {
+      "id": "world-history-vol2",
+      "title": "World History Volume 2",
+      "author": "Ann Kordas et al.",
+      "publisher": "OpenStax",
+      "cover": "thumbnails/world-history-vol2.jpg",
+      "description": "From 1400 CE to the present: exploration, empires, revolutions, and the modern world.",
+      "subjects": ["History", "World History", "Modern History"]
+    }
+  ]
+}
