@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
-import SafeLink from '../components/SafeLink'
 
 const navLinks = [
   { label: 'Theater', href: '/' },
@@ -138,30 +137,49 @@ export default function Portfolio() {
         subheading="Interactive demos, production apps, and tools."
       >
         <div className="portfolio-grid">
-          {projects.map((project) => (
-            <a
-              key={project.id}
-              href={project.link}
-              className="project-card"
-              target={project.link?.startsWith('http') ? '_blank' : undefined}
-              rel={project.link?.startsWith('http') ? 'noopener noreferrer' : undefined}
-            >
-              <div className={`project-logo ${project.logoSize === 'large' ? 'logo-large' : ''}`}>
-                {project.logoType === 'image' ? (
-                  <img src={project.logo} alt={project.title} />
-                ) : (
-                  <span className="logo-text">{project.logo}</span>
-                )}
-              </div>
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <div className="stack-pills">
-                {project.stack.map((item) => (
-                  <span key={item} className="stack-pill">{item}</span>
-                ))}
-              </div>
-            </a>
-          ))}
+          {projects.map((project) => {
+            const isLink = Boolean(project.link)
+            const CardTag = isLink ? 'a' : 'div'
+            const isLargeLogo = project.logoSize === 'large'
+            const logoSize = isLargeLogo ? 160 : 80
+            const cardProps = isLink
+              ? {
+                  href: project.link,
+                  target: project.link?.startsWith('http') ? '_blank' : undefined,
+                  rel: project.link?.startsWith('http') ? 'noopener noreferrer' : undefined
+                }
+              : {}
+
+            return (
+              <CardTag
+                key={project.id}
+                className={`project-card ${!isLink ? 'project-card--static' : ''}`}
+                {...cardProps}
+              >
+                <div className={`project-logo ${isLargeLogo ? 'logo-large' : ''}`}>
+                  {project.logoType === 'image' ? (
+                    <img
+                      src={project.logo}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={logoSize}
+                      height={logoSize}
+                    />
+                  ) : (
+                    <span className="logo-text">{project.logo}</span>
+                  )}
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="stack-pills">
+                  {project.stack.map((item) => (
+                    <span key={item} className="stack-pill">{item}</span>
+                  ))}
+                </div>
+              </CardTag>
+            )
+          })}
         </div>
       </Section>
 

@@ -39,14 +39,23 @@ const Section = ({
     const h1 = subheadingRef.current
     if (!h1) return
 
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
+    let ticking = false
     const handleScroll = () => {
-      const scrolled = window.scrollY
-      const translateX = Math.min(30, scrolled / 10)
-      h1.style.transform = `translateX(${translateX}px)`
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(() => {
+        const scrolled = window.scrollY
+        const translateX = Math.min(30, scrolled / 10)
+        h1.style.transform = `translateX(${translateX}px)`
+        ticking = false
+      })
     }
 
     handleScroll()
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
