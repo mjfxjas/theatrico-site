@@ -1,3 +1,243 @@
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.bento-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.bento-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(199, 83, 43, 0.3);
+  transform: translateY(-2px);
+}
+
+.bento-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.bento-medium {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.bento-small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.bento-preview {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.bento-large .bento-preview {
+  min-height: 400px;
+}
+
+.bento-medium .bento-preview {
+  min-height: 250px;
+}
+
+.bento-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bento-content h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.bento-content p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.bento-content .stack-pills {
+  margin: 0;
+}
+
+.bento-content .text-button {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 1200px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .bento-large {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bento-large,
+  .bento-medium {
+    grid-column: span 2;
+  }
+  
+  .bento-small {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bento-large,
+  .bento-medium,
+  .bento-small {
+    grid-column: span 1;
+  }
+}
+
+.portfolio-grid-section {
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+.portfolio-grid-section .section-heading {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(199, 83, 43, 0.3);
+  transform: translateY(-2px);
+}
+
+.project-logo {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.project-logo.logo-large {
+  width: 160px;
+  height: 160px;
+}
+
+.project-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.project-logo .logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.project-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.project-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.grid-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.grid-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(199, 83, 43, 0.3);
+  transform: translateY(-2px);
+}
+
+.grid-item h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.grid-item p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.grid-item .stack-pills {
+  margin: 0.5rem 0 0 0;
+}
+
+.grid-item .text-button {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
 .portfolio-section .section-heading p {
   max-width: 46ch;
   margin-left: auto;
