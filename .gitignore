@@ -15,6 +15,8 @@ public/media/*
 !public/media/.gitkeep
 !public/media/tivoli/
 !public/media/tivoli/**
+public/portfolio/absh/assets/*.mov
+public/portfolio/absh/assets/*.mp4
 
 # Editor directories and files
 .vscode/*
