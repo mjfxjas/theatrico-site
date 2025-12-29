@@ -136,6 +136,13 @@
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
 .project-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -150,6 +157,12 @@
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .project-card {
+    padding: 1.25rem 1rem;
+  }
 }
 
 .project-card:hover {
@@ -170,6 +183,18 @@
 .project-logo.logo-large {
   width: 160px;
   height: 160px;
+}
+
+@media (max-width: 768px) {
+  .project-logo {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .project-logo.logo-large {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 .project-logo img {
@@ -303,6 +328,7 @@
   flex-wrap: wrap;
   gap: 0.4rem;
   margin: 0.35rem 0 0.65rem 0;
+  justify-content: center;
 }
 
 .stack-pill {
