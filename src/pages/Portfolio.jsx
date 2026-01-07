@@ -57,7 +57,7 @@ const projects = [
     logo: '/portfolio/RFC_logo_clean.png',
     logoType: 'image',
     stack: ['Icecast', 'Liquidsoap', 'EC2'],
-    link: 'https://theatrico.org/stream/'
+    link: '/stream/'
   },
   {
     id: 'sky-blocks',
@@ -83,7 +83,8 @@ const projects = [
     description: 'LinkedIn automation with AI cover letters.',
     logo: '/portfolio/jobhunter_logo.png',
     logoType: 'image',
-    stack: ['Python + Selenium', 'Claude API', 'Easy Apply']
+    stack: ['Python + Selenium', 'Claude API', 'Easy Apply'],
+    link: 'https://github.com/mjfxjas/job_hunter'
   },
   {
     id: 'aws-automations',
@@ -91,7 +92,8 @@ const projects = [
     description: 'Multi-service cleanup CLI with safety switches.',
     logo: '/portfolio/awscleanup_logo.png',
     logoType: 'image',
-    stack: ['Python + boto3', 'Rich TUI', 'Dry-run defaults']
+    stack: ['Python + boto3', 'Rich TUI', 'Dry-run defaults'],
+    link: 'https://github.com/mjfxjas/aws_automations'
   },
   {
     id: 'aws-utils',
@@ -99,7 +101,8 @@ const projects = [
     description: 'Unified CLI for AWS operations.',
     logo: '/portfolio/awstoolset_logo.png',
     logoType: 'image',
-    stack: ['Python CLI', 'Config-driven', 'Shell-friendly']
+    stack: ['Python CLI', 'Config-driven', 'Shell-friendly'],
+    link: 'https://github.com/mjfxjas/aws-examples'
   },
   {
     id: 'wonder-dash',
@@ -108,7 +111,8 @@ const projects = [
     logo: '/portfolio/wonderdash_logo.png',
     logoType: 'image',
     logoSize: 'large',
-    stack: ['Python + Rich', 'Live metrics', 'CSV exports']
+    stack: ['Python + Rich', 'Live metrics', 'CSV exports'],
+    link: 'https://github.com/mjfxjas/wonder_dash'
   }
 ]
 
