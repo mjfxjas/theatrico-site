@@ -35,7 +35,7 @@ const featuredProjects = [
       'Standardized backend deploy flow with safer parameter handling and rollback-aware troubleshooting.',
       'Reduced deployment risk by making IAM gaps explicit and codifying repeatable policy updates.'
     ],
-    link: 'https://scrumble.dev'
+    link: 'https://scrumble.cc'
   },
   {
     id: 'logistics',
