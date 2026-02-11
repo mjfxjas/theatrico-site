@@ -5,7 +5,6 @@ const startButton = document.querySelector('[data-start]');
 const fileInput = document.querySelector('[data-file]');
 
 const contactForm = document.querySelector('[data-contact-form]');
-const contactStatus = document.querySelector('[data-contact-status]');
 
 const gateForm = document.querySelector('[data-gate-form]');
 const gateInput = document.querySelector('[data-gate-input]');
@@ -69,7 +68,7 @@ contactForm?.addEventListener('submit', async (event) => {
   button.disabled = true;
   
   try {
-    fetch('https://srkxp7r75qfs5yjzxfza6klqte0izcfx.lambda-url.us-east-1.on.aws/', {
+    await fetch('https://srkxp7r75qfs5yjzxfza6klqte0izcfx.lambda-url.us-east-1.on.aws/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -81,7 +80,7 @@ contactForm?.addEventListener('submit', async (event) => {
       button.textContent = originalText;
       button.disabled = false;
     }, 3000);
-  } catch (error) {
+  } catch {
     contactForm.reset();
     button.textContent = 'Thanks!';
     setTimeout(() => {

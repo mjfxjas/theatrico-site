@@ -1,16 +1,34 @@
-# React + Vite
+# Theatrico Site (Vite + React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Landing site for Theatrico, built with React and Vite.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 18+
+- npm
 
-## React Compiler
+## Local Development
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Production Build
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run build
+```
+
+The build output is written to `dist/`. The build script also runs `scripts/create-spa-route-indexes.mjs` to copy `index.html` into SPA route folders used by static hosting.
+
+## Preview Hosting
+
+See `docs/preview-hosting.md` for the CloudFront + S3 preview flow. The deploy helper is `scripts/deploy-preview.sh`.
+
+## Scripts
+
+- `npm run dev` - Start Vite dev server
+- `npm run build` - Build production bundle and SPA route indexes
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint

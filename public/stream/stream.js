@@ -7,6 +7,8 @@ const streamUrlEl = document.querySelector("[data-stream-url]");
 const copyButton = document.querySelector("[data-copy]");
 const copyHintEl = copyButton?.querySelector(".copy-hint");
 const antennaStack = document.querySelector(".antenna-stack");
+const muteButton = document.querySelector("[data-mute]");
+const volumeEl = document.querySelector("[data-volume]");
 
 const setStatus = (text, state = "idle") => {
   const label = text.toUpperCase();
@@ -109,12 +111,6 @@ audioEl.addEventListener("waiting", () => setStatus("Buffering", "loading"));
 audioEl.addEventListener("stalled", () => setStatus("Reconnecting", "loading"));
 audioEl.addEventListener("ended", () => {
   setStatus("Idle", "idle");
-
-// Initialize volume to slider value
-if (volumeEl) {
-  const vol = Number(volumeEl.value) || 70;
-  audioEl.volume = vol / 100;
-}
   updatePlayUI(false);
 });
 

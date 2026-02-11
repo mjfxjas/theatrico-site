@@ -7,7 +7,6 @@ const navLinks = [
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
   { label: 'Technology', href: '/portfolio' },
-  { label: 'Scrumble', href: 'https://scrumble.dev' },
   { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
@@ -53,24 +52,6 @@ const recentWorks = [
       { url: 'https://chattanoogamotorcar.com', label: 'Festival Website' }
     ],
     media: { type: 'youtube', src: 'lawUTdpMRnM' }
-  }
-]
-
-const principles = [
-  {
-    id: 'precision',
-    title: 'Precision feels kind.',
-    detail: 'We over-prepare, then choreograph the night so artists and guests never feel the seams.'
-  },
-  {
-    id: 'space',
-    title: 'Space is storytelling.',
-    detail: 'Every riser, table, and quiet corner is a punctuation mark—we draw the map, then walk it with you.'
-  },
-  {
-    id: 'calm',
-    title: 'Calm is contagious.',
-    detail: 'We keep crews composed, cues clear, and calls gentle. The room trusts teams who listen.'
   }
 ]
 

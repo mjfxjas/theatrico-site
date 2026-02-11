@@ -7,7 +7,6 @@ const navLinks = [
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Scrumble', href: 'https://scrumble.dev' },
   { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 

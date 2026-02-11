@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 import SafeLink from '../components/SafeLink'
@@ -8,7 +7,6 @@ const navLinks = [
   { label: 'Film', href: '/film' },
   { label: 'People', href: '/people' },
   { label: 'Technology', href: '/portfolio' },
-  { label: 'Scrumble', href: 'https://scrumble.dev' },
   { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
@@ -114,27 +112,6 @@ const capabilities = [
   'Post-production in DaVinci Resolve and Adobe Creative Cloud.',
   'Captioning, transcription, and accessibility deliverables built-in.',
   'Secure review portals with version tracking and feedback capture.'
-]
-
-const packages = [
-  {
-    name: 'Single Story',
-    price: 'Starting at $4,200',
-    description: 'One flagship film (60-90 sec) plus social cutdowns and captioned masters.',
-    includes: ['Pre-production workshop', 'Full-day production', 'Two editorial rounds', 'Captions + thumbnail stills']
-  },
-  {
-    name: 'Seasonal Mini-Series',
-    price: 'Starting at $11,500',
-    description: 'Three-episode arc with shared look, staggered release plan, and partner spotlights.',
-    includes: ['Story arc development', 'Two production windows', 'Bespoke graphics package', 'Four social teasers']
-  },
-  {
-    name: 'Annual Campaign',
-    price: 'Starting at $28,000',
-    description: 'Twelve-film roadmap covering legacy, impact, partners, and future campaign messaging.',
-    includes: ['Quarterly production blocks', 'Dedicated post supervisor', 'Asset library management', 'On-call add-on days']
-  }
 ]
 
 export default function Film() {
