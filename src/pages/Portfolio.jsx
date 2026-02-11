@@ -10,36 +10,108 @@ const navLinks = [
   { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
-const projects = [
+const hiringSnapshot = {
+  roleTarget: 'Full-stack / DevOps engineer focused on AWS, CI/CD, and production reliability.',
+  strengths: [
+    'Builds and ships end-to-end web products from frontend UX to cloud infrastructure.',
+    'Owns deployment safety: branch strategy, OIDC auth, IAM hardening, and rollback-aware release flow.',
+    'Translates product needs into reliable systems with observability, automation, and clear runbooks.'
+  ],
+  stack: ['AWS', 'Terraform', 'SAM/CloudFormation', 'GitHub Actions', 'React', 'Node', 'Python'],
+  location: 'Based in Chattanooga, TN • Open to remote and relocation opportunities.'
+}
+
+const featuredProjects = [
+  {
+    id: 'scrumble',
+    title: 'Scrumble',
+    description: 'Production serverless application with hardened AWS deployment workflows.',
+    logo: 'SC',
+    logoType: 'text',
+    logoSize: 'large',
+    stack: ['AWS SAM', 'Lambda', 'DynamoDB', 'GitHub Actions', 'OIDC + IAM'],
+    outcomes: [
+      'Replaced static AWS keys in CI with GitHub OIDC role assumption and trust-policy controls.',
+      'Standardized backend deploy flow with safer parameter handling and rollback-aware troubleshooting.',
+      'Reduced deployment risk by making IAM gaps explicit and codifying repeatable policy updates.'
+    ],
+    link: 'https://scrumble.dev'
+  },
   {
     id: 'logistics',
     title: 'Logistics Control Tower',
-    description: 'Live route visualization and fleet management dashboard.',
+    description: 'Live route visibility and fleet operations dashboard for active delivery workflows.',
     logo: '/portfolio/logistix_logo.png',
     logoType: 'image',
     logoSize: 'large',
-    stack: ['React', 'Node/Express', 'SVG + Canvas'],
+    stack: ['React', 'Node/Express', 'SVG + Canvas', 'CloudFront'],
+    outcomes: [
+      'Consolidated route status, map context, and fleet controls into a single operator view.',
+      'Improved dispatch responsiveness by reducing tool-switching across operations tasks.',
+      'Shipped frontend and backend updates through a repeatable CI/CD path for faster release cycles.'
+    ],
     link: 'https://d23933lj3ei2am.cloudfront.net'
   },
   {
     id: 'edubot',
     title: 'EduBot',
-    description: 'AI tutor with curriculum-aligned responses.',
+    description: 'AI tutoring assistant with curriculum-aware prompts and serverless delivery.',
     logo: '/portfolio/edubot/logo.png',
     logoType: 'image',
     logoSize: 'large',
     stack: ['React + TypeScript', 'OpenAI', 'Lambda'],
+    outcomes: [
+      'Implemented structured prompt and response flow to keep outputs aligned to classroom context.',
+      'Used serverless deployment to keep runtime costs predictable at low-to-moderate traffic.',
+      'Delivered a practical prototype that can be extended into production guardrails and analytics.'
+    ],
     link: '/portfolio/edubot'
   },
   {
     id: 'websites',
     title: 'Theatrico',
-    description: 'Cinematic marketing site with video backgrounds.',
+    description: 'High-performance marketing site built for media-heavy storytelling.',
     logo: '/portfolio/tco_logo.png',
     logoType: 'image',
     logoSize: 'large',
     stack: ['React + Vite', 'Video optimization', 'CloudFront'],
+    outcomes: [
+      'Balanced cinematic media design with practical delivery constraints for mobile and desktop.',
+      'Maintained reliable release flow via GitHub Actions checks and controlled deploy steps.',
+      'Preserved brand quality while improving operational maintainability for ongoing content updates.'
+    ],
     link: 'https://theatrico.org'
+  }
+]
+
+const additionalProjects = [
+  {
+    id: 'aws-automations',
+    title: 'AWS Cleanup Suite',
+    description: 'Multi-service cleanup CLI with safety-first defaults.',
+    logo: '/portfolio/awscleanup_logo.png',
+    logoType: 'image',
+    stack: ['Python + boto3', 'Rich TUI', 'Dry-run defaults'],
+    link: 'https://github.com/mjfxjas/aws_automations'
+  },
+  {
+    id: 'wonder-dash',
+    title: 'WonderDash',
+    description: 'Terminal dashboard for CloudFront usage visibility.',
+    logo: '/portfolio/wonderdash_logo.png',
+    logoType: 'image',
+    logoSize: 'large',
+    stack: ['Python + Rich', 'Live metrics', 'CSV exports'],
+    link: 'https://github.com/mjfxjas/wonder_dash'
+  },
+  {
+    id: 'radio-free',
+    title: 'Radio Free Chattanooga',
+    description: 'Live community audio streaming stack.',
+    logo: '/portfolio/RFC_logo_clean.png',
+    logoType: 'image',
+    stack: ['Icecast', 'Liquidsoap', 'EC2'],
+    link: '/stream/'
   },
   {
     id: 'absh',
@@ -49,20 +121,32 @@ const projects = [
     logoType: 'image',
     stack: ['React', 'Video backgrounds', 'S3'],
     link: 'https://andybondsignaturehomes.com'
+  }
+]
+
+const labsProjects = [
+  {
+    id: 'aws-utils',
+    title: 'AWS Toolbelt (Lab)',
+    description: 'Config-driven command-line toolkit for routine AWS tasks.',
+    logo: '/portfolio/awstoolset_logo.png',
+    logoType: 'image',
+    stack: ['Python CLI', 'Config-driven', 'Shell-friendly'],
+    link: 'https://github.com/mjfxjas/aws-examples'
   },
   {
     id: 'radio-free',
-    title: 'Radio Free Chattanooga',
-    description: 'Live audio streaming platform.',
-    logo: '/portfolio/RFC_logo_clean.png',
+    title: 'Job Hunter (Lab)',
+    description: 'Job-application workflow experiment with browser automation.',
+    logo: '/portfolio/jobhunter_logo.png',
     logoType: 'image',
-    stack: ['Icecast', 'Liquidsoap', 'EC2'],
-    link: '/stream/'
+    stack: ['Python + Selenium', 'LLM API', 'Workflow automation'],
+    link: 'https://github.com/mjfxjas/job_hunter'
   },
   {
     id: 'sky-blocks',
-    title: 'Sky Blocks Run',
-    description: 'Endless runner game with adaptive gravity.',
+    title: 'Sky Blocks Run (Lab)',
+    description: 'Game mechanics experiment for mobile controls and physics.',
     logo: '/portfolio/skyblocks_logo.png',
     logoType: 'image',
     stack: ['HTML5 Canvas', 'JavaScript', 'Mobile controls'],
@@ -70,59 +154,14 @@ const projects = [
   },
   {
     id: 'magic-h8',
-    title: 'Magic H8 Ball',
-    description: 'Interactive fortune-telling toy.',
+    title: 'Magic H8 Ball (Lab)',
+    description: 'Interaction and animation prototype for playful UI effects.',
     logo: '/portfolio/h8ball_logo.png',
     logoType: 'image',
     stack: ['HTML/CSS/JS', 'Motion detection', 'Animations'],
     link: '/portfolio/magic-h8-ball.html'
-  },
-  {
-    id: 'job-hunter',
-    title: 'Job Hunter',
-    description: 'LinkedIn automation with AI cover letters.',
-    logo: '/portfolio/jobhunter_logo.png',
-    logoType: 'image',
-    stack: ['Python + Selenium', 'Claude API', 'Easy Apply'],
-    link: 'https://github.com/mjfxjas/job_hunter'
-  },
-  {
-    id: 'aws-automations',
-    title: 'AWS Cleanup Suite',
-    description: 'Multi-service cleanup CLI with safety switches.',
-    logo: '/portfolio/awscleanup_logo.png',
-    logoType: 'image',
-    stack: ['Python + boto3', 'Rich TUI', 'Dry-run defaults'],
-    link: 'https://github.com/mjfxjas/aws_automations'
-  },
-  {
-    id: 'aws-utils',
-    title: 'AWS Toolbelt',
-    description: 'Unified CLI for AWS operations.',
-    logo: '/portfolio/awstoolset_logo.png',
-    logoType: 'image',
-    stack: ['Python CLI', 'Config-driven', 'Shell-friendly'],
-    link: 'https://github.com/mjfxjas/aws-examples'
-  },
-  {
-    id: 'wonder-dash',
-    title: 'WonderDash',
-    description: 'CloudFront terminal dashboard.',
-    logo: '/portfolio/wonderdash_logo.png',
-    logoType: 'image',
-    logoSize: 'large',
-    stack: ['Python + Rich', 'Live metrics', 'CSV exports'],
-    link: 'https://github.com/mjfxjas/wonder_dash'
   }
 ]
-
-const FlowPreview = () => null
-const CarouselPreview = () => null
-const RunnerPreview = () => null
-const EightBallPreview = () => null
-const StreamPreview = () => null
-const EdubotPreview = () => null
-const ProjectPreview = () => null
 
 export default function Portfolio() {
   useEffect(() => {
@@ -138,11 +177,146 @@ export default function Portfolio() {
       <Section
         id="portfolio"
         className="portfolio-section"
-        heading="Recent Work"
-        subheading="Interactive demos, production apps, and tools."
+        heading="Hiring Snapshot"
+        subheading="Engineering focus for production teams."
+      >
+        <div className="hiring-snapshot-card">
+          <p className="hiring-role-target">{hiringSnapshot.roleTarget}</p>
+          <ul className="hiring-strengths">
+            {hiringSnapshot.strengths.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p className="hiring-location">{hiringSnapshot.location}</p>
+          <div className="stack-pills">
+            {hiringSnapshot.stack.map((item) => (
+              <span key={item} className="stack-pill">{item}</span>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        id="featured-work"
+        className="portfolio-section"
+        heading="Featured Work"
+        subheading="Production systems with real delivery and operations impact."
       >
         <div className="portfolio-grid">
-          {projects.map((project) => {
+          {featuredProjects.map((project) => {
+            const isLink = Boolean(project.link)
+            const CardTag = isLink ? 'a' : 'div'
+            const isLargeLogo = project.logoSize === 'large'
+            const logoSize = isLargeLogo ? 160 : 80
+            const cardProps = isLink
+              ? {
+                  href: project.link,
+                  target: project.link?.startsWith('http') ? '_blank' : undefined,
+                  rel: project.link?.startsWith('http') ? 'noopener noreferrer' : undefined
+                }
+              : {}
+
+            return (
+              <CardTag
+                key={project.id}
+                className={`project-card ${!isLink ? 'project-card--static' : ''}`}
+                {...cardProps}
+              >
+                <div className={`project-logo ${isLargeLogo ? 'logo-large' : ''}`}>
+                  {project.logoType === 'image' ? (
+                    <img
+                      src={project.logo}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={logoSize}
+                      height={logoSize}
+                    />
+                  ) : (
+                    <span className="logo-text">{project.logo}</span>
+                  )}
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                {Array.isArray(project.outcomes) && project.outcomes.length > 0 && (
+                  <ul className="project-outcomes">
+                    {project.outcomes.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+                <div className="stack-pills">
+                  {project.stack.map((item) => (
+                    <span key={item} className="stack-pill">{item}</span>
+                  ))}
+                </div>
+              </CardTag>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Section
+        id="additional-work"
+        className="portfolio-section"
+        heading="Additional Production Work"
+        subheading="Client sites and supporting platform tools."
+      >
+        <div className="portfolio-grid">
+          {additionalProjects.map((project) => {
+            const isLink = Boolean(project.link)
+            const CardTag = isLink ? 'a' : 'div'
+            const isLargeLogo = project.logoSize === 'large'
+            const logoSize = isLargeLogo ? 160 : 80
+            const cardProps = isLink
+              ? {
+                  href: project.link,
+                  target: project.link?.startsWith('http') ? '_blank' : undefined,
+                  rel: project.link?.startsWith('http') ? 'noopener noreferrer' : undefined
+                }
+              : {}
+
+            return (
+              <CardTag
+                key={project.id}
+                className={`project-card ${!isLink ? 'project-card--static' : ''}`}
+                {...cardProps}
+              >
+                <div className={`project-logo ${isLargeLogo ? 'logo-large' : ''}`}>
+                  {project.logoType === 'image' ? (
+                    <img
+                      src={project.logo}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={logoSize}
+                      height={logoSize}
+                    />
+                  ) : (
+                    <span className="logo-text">{project.logo}</span>
+                  )}
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="stack-pills">
+                  {project.stack.map((item) => (
+                    <span key={item} className="stack-pill">{item}</span>
+                  ))}
+                </div>
+              </CardTag>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Section
+        id="labs"
+        className="portfolio-section"
+        heading="Labs / Experiments"
+        subheading="Smaller prototypes that sharpen UI and automation skills."
+      >
+        <div className="portfolio-grid">
+          {labsProjects.map((project) => {
             const isLink = Boolean(project.link)
             const CardTag = isLink ? 'a' : 'div'
             const isLargeLogo = project.logoSize === 'large'
