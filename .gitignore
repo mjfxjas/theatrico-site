@@ -28,3 +28,4 @@ public/portfolio/absh/assets/*.mp4
 *.njsproj
 *.sln
 *.sw?
+tmp/local-scratch/

@@ -2,6 +2,15 @@
 
 This folder collects instructions and utilities for turning Markdown-based scripts into web-presentable React pages.
 
+## Deployment Helper
+
+`sync_theatrico.sh` is a CI/CD workflow trigger helper (it no longer performs direct S3 syncs):
+
+```bash
+scripts/sync_theatrico.sh --env dev
+scripts/sync_theatrico.sh --env prod --ref main
+```
+
 ## Workflow Outline
 1. Draft scripts in Markdown (see `docs/script-template.md`).
 2. Use a parser to convert Markdown sections into structured JSON.
