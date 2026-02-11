@@ -10,15 +10,12 @@ const navLinks = [
   { label: 'Contact', href: 'mailto:jon@theatrico.org' }
 ]
 
-const hiringSnapshot = {
-  roleTarget: 'Full-stack / DevOps engineer focused on AWS, CI/CD, and production reliability.',
-  strengths: [
-    'Builds and ships end-to-end web products from frontend UX to cloud infrastructure.',
-    'Owns deployment safety: branch strategy, OIDC auth, IAM hardening, and rollback-aware release flow.',
-    'Translates product needs into reliable systems with observability, automation, and clear runbooks.'
-  ],
-  stack: ['AWS', 'Terraform', 'SAM/CloudFormation', 'GitHub Actions', 'React', 'Node', 'Python'],
-  location: 'Based in Chattanooga, TN • Open to remote and relocation opportunities.'
+const engineeringFocus = {
+  summary:
+    'I build and operate production web systems with an emphasis on secure delivery, practical reliability, and maintainable cloud operations.',
+  detail:
+    'Recent work has centered on AWS serverless architecture, CI/CD hardening, IAM/OIDC security, deployment troubleshooting, and release workflows that are safer under real production pressure.',
+  stack: ['AWS', 'Terraform', 'SAM/CloudFormation', 'GitHub Actions', 'React', 'Node', 'Python']
 }
 
 const featuredProjects = [
@@ -175,28 +172,6 @@ export default function Portfolio() {
   return (
     <Layout title="Technology - Theatrico" navLinks={navLinks}>
       <Section
-        id="portfolio"
-        className="portfolio-section"
-        heading="Hiring Snapshot"
-        subheading="Engineering focus for production teams."
-      >
-        <div className="hiring-snapshot-card">
-          <p className="hiring-role-target">{hiringSnapshot.roleTarget}</p>
-          <ul className="hiring-strengths">
-            {hiringSnapshot.strengths.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <p className="hiring-location">{hiringSnapshot.location}</p>
-          <div className="stack-pills">
-            {hiringSnapshot.stack.map((item) => (
-              <span key={item} className="stack-pill">{item}</span>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      <Section
         id="featured-work"
         className="portfolio-section"
         heading="Featured Work"
@@ -306,6 +281,23 @@ export default function Portfolio() {
               </CardTag>
             )
           })}
+        </div>
+      </Section>
+
+      <Section
+        id="engineering-focus"
+        className="portfolio-section"
+        heading="Engineering Focus"
+        subheading="How I approach delivery and operations."
+      >
+        <div className="hiring-snapshot-card">
+          <p className="hiring-role-target">{engineeringFocus.summary}</p>
+          <p className="hiring-location">{engineeringFocus.detail}</p>
+          <div className="stack-pills">
+            {engineeringFocus.stack.map((item) => (
+              <span key={item} className="stack-pill">{item}</span>
+            ))}
+          </div>
         </div>
       </Section>
 
