@@ -29,3 +29,7 @@ public/portfolio/absh/assets/*.mp4
 *.sln
 *.sw?
 tmp/local-scratch/
+
+.env
+.direnv/
+.envrc
