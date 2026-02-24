@@ -35,128 +35,48 @@ const featuredProjects = [
     link: 'https://scrumble.cc'
   },
   {
-    id: 'logistics',
-    title: 'Logistics Control Tower',
-    description: 'Live route visibility and fleet operations dashboard for active delivery workflows.',
-    logo: '/portfolio/logistix_logo.png',
-    logoType: 'image',
-    logoSize: 'large',
-    stack: ['React', 'Node/Express', 'SVG + Canvas', 'CloudFront'],
-    outcomes: [
-      'Consolidated route status, map context, and fleet controls into a single operator view.',
-      'Improved dispatch responsiveness by reducing tool-switching across operations tasks.',
-      'Shipped frontend and backend updates through a repeatable CI/CD path for faster release cycles.'
-    ],
-    link: 'https://d23933lj3ei2am.cloudfront.net'
-  },
-  {
-    id: 'edubot',
-    title: 'EduBot',
-    description: 'AI tutoring assistant with curriculum-aware prompts and serverless delivery.',
-    logo: '/portfolio/edubot/logo.png',
-    logoType: 'image',
-    logoSize: 'large',
-    stack: ['React + TypeScript', 'OpenAI', 'Lambda'],
-    outcomes: [
-      'Implemented structured prompt and response flow to keep outputs aligned to classroom context.',
-      'Used serverless deployment to keep runtime costs predictable at low-to-moderate traffic.',
-      'Delivered a practical prototype that can be extended into production guardrails and analytics.'
-    ],
-    link: '/portfolio/edubot'
-  },
-  {
-    id: 'websites',
-    title: 'Theatrico',
-    description: 'High-performance marketing site built for media-heavy storytelling.',
+    id: 'theatrico-portfolio',
+    title: 'Theatrico Portfolio',
+    description: 'Public portfolio showcasing current theater, film, and technology work.',
     logo: '/portfolio/tco_logo.png',
     logoType: 'image',
-    logoSize: 'large',
-    stack: ['React + Vite', 'Video optimization', 'CloudFront'],
+    stack: ['React + Vite', 'Media-rich UI', 'CloudFront'],
     outcomes: [
-      'Balanced cinematic media design with practical delivery constraints for mobile and desktop.',
-      'Maintained reliable release flow via GitHub Actions checks and controlled deploy steps.',
-      'Preserved brand quality while improving operational maintainability for ongoing content updates.'
+      'Consolidates public project work in a single, easy-to-scan destination.',
+      'Maintains a stable release workflow for ongoing updates and content changes.',
+      'Balances visual presentation with practical performance and maintainability.'
     ],
-    link: 'https://theatrico.org'
+    link: 'https://theatrico.org/portfolio'
   }
 ]
 
 const additionalProjects = [
   {
     id: 'aws-automations',
-    title: 'AWS Cleanup Suite',
-    description: 'Multi-service cleanup CLI with safety-first defaults.',
-    logo: '/portfolio/awscleanup_logo.png',
-    logoType: 'image',
-    stack: ['Python + boto3', 'Rich TUI', 'Dry-run defaults'],
-    link: 'https://github.com/mjfxjas/aws_automations'
+    title: 'aws-automations',
+    description: 'Published Python package for AWS automation utilities.',
+    logo: 'AA',
+    logoType: 'text',
+    stack: ['Python', 'PyPI', 'AWS'],
+    link: 'https://pypi.org/project/aws-automations/'
+  },
+  {
+    id: 'aws-cost-optimizer',
+    title: 'aws-cost-optimizer',
+    description: 'Published Python package focused on AWS cost optimization workflows.',
+    logo: 'ACO',
+    logoType: 'text',
+    stack: ['Python', 'PyPI', 'AWS Billing'],
+    link: 'https://pypi.org/project/aws-cost-optimizer/'
   },
   {
     id: 'wonder-dash',
-    title: 'WonderDash',
-    description: 'Terminal dashboard for CloudFront usage visibility.',
-    logo: '/portfolio/wonderdash_logo.png',
-    logoType: 'image',
-    logoSize: 'large',
-    stack: ['Python + Rich', 'Live metrics', 'CSV exports'],
-    link: 'https://github.com/mjfxjas/wonder_dash'
-  },
-  {
-    id: 'radio-free',
-    title: 'Radio Free Chattanooga',
-    description: 'Live community audio streaming stack.',
-    logo: '/portfolio/RFC_logo_clean.png',
-    logoType: 'image',
-    stack: ['Icecast', 'Liquidsoap', 'EC2'],
-    link: '/stream/'
-  },
-  {
-    id: 'absh',
-    title: 'Andy Bond Signature Homes',
-    description: 'Luxury real estate portfolio site.',
-    logo: '/portfolio/absh/absh_logo.png',
-    logoType: 'image',
-    stack: ['React', 'Video backgrounds', 'S3'],
-    link: 'https://andybondsignaturehomes.com'
-  }
-]
-
-const labsProjects = [
-  {
-    id: 'aws-utils',
-    title: 'AWS Toolbelt (Lab)',
-    description: 'Config-driven command-line toolkit for routine AWS tasks.',
-    logo: '/portfolio/awstoolset_logo.png',
-    logoType: 'image',
-    stack: ['Python CLI', 'Config-driven', 'Shell-friendly'],
-    link: 'https://github.com/mjfxjas/aws-examples'
-  },
-  {
-    id: 'radio-free',
-    title: 'Job Hunter (Lab)',
-    description: 'Job-application workflow experiment with browser automation.',
-    logo: '/portfolio/jobhunter_logo.png',
-    logoType: 'image',
-    stack: ['Python + Selenium', 'LLM API', 'Workflow automation'],
-    link: 'https://github.com/mjfxjas/job_hunter'
-  },
-  {
-    id: 'sky-blocks',
-    title: 'Sky Blocks Run (Lab)',
-    description: 'Game mechanics experiment for mobile controls and physics.',
-    logo: '/portfolio/skyblocks_logo.png',
-    logoType: 'image',
-    stack: ['HTML5 Canvas', 'JavaScript', 'Mobile controls'],
-    link: '/portfolio/sky-blocks-run.html'
-  },
-  {
-    id: 'magic-h8',
-    title: 'Magic H8 Ball (Lab)',
-    description: 'Interaction and animation prototype for playful UI effects.',
-    logo: '/portfolio/h8ball_logo.png',
-    logoType: 'image',
-    stack: ['HTML/CSS/JS', 'Motion detection', 'Animations'],
-    link: '/portfolio/magic-h8-ball.html'
+    title: 'wonder-dash',
+    description: 'Published Python package for terminal-based AWS usage dashboards.',
+    logo: 'WD',
+    logoType: 'text',
+    stack: ['Python', 'PyPI', 'CLI'],
+    link: 'https://pypi.org/project/wonder-dash/'
   }
 ]
 
@@ -175,7 +95,7 @@ export default function Portfolio() {
         id="featured-work"
         className="portfolio-section"
         heading="Featured Work"
-        subheading="Production systems with real delivery and operations impact."
+        subheading="Current public work with direct production and portfolio relevance."
       >
         <div className="portfolio-grid">
           {featuredProjects.map((project) => {
@@ -234,8 +154,8 @@ export default function Portfolio() {
       <Section
         id="additional-work"
         className="portfolio-section"
-        heading="Additional Production Work"
-        subheading="Client sites and supporting platform tools."
+        heading="Published Packages (PyPI)"
+        subheading="Selected packages that are currently published and publicly installable."
       >
         <div className="portfolio-grid">
           {additionalProjects.map((project) => {
@@ -298,59 +218,6 @@ export default function Portfolio() {
               <span key={item} className="stack-pill">{item}</span>
             ))}
           </div>
-        </div>
-      </Section>
-
-      <Section
-        id="labs"
-        className="portfolio-section"
-        heading="Labs / Experiments"
-        subheading="Smaller prototypes that sharpen UI and automation skills."
-      >
-        <div className="portfolio-grid">
-          {labsProjects.map((project) => {
-            const isLink = Boolean(project.link)
-            const CardTag = isLink ? 'a' : 'div'
-            const isLargeLogo = project.logoSize === 'large'
-            const logoSize = isLargeLogo ? 160 : 80
-            const cardProps = isLink
-              ? {
-                  href: project.link,
-                  target: project.link?.startsWith('http') ? '_blank' : undefined,
-                  rel: project.link?.startsWith('http') ? 'noopener noreferrer' : undefined
-                }
-              : {}
-
-            return (
-              <CardTag
-                key={project.id}
-                className={`project-card ${!isLink ? 'project-card--static' : ''}`}
-                {...cardProps}
-              >
-                <div className={`project-logo ${isLargeLogo ? 'logo-large' : ''}`}>
-                  {project.logoType === 'image' ? (
-                    <img
-                      src={project.logo}
-                      alt={project.title}
-                      loading="lazy"
-                      decoding="async"
-                      width={logoSize}
-                      height={logoSize}
-                    />
-                  ) : (
-                    <span className="logo-text">{project.logo}</span>
-                  )}
-                </div>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <div className="stack-pills">
-                  {project.stack.map((item) => (
-                    <span key={item} className="stack-pill">{item}</span>
-                  ))}
-                </div>
-              </CardTag>
-            )
-          })}
         </div>
       </Section>
 
