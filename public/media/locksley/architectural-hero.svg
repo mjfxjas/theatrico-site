@@ -1,0 +1,36 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#F4F0EA"/>
+  <g opacity="0.45" stroke="#8E6B45" stroke-width="2">
+    <path d="M140 700H1060"/>
+    <path d="M180 700V300L440 180L720 270L980 180V700"/>
+    <path d="M260 700V360H470V700"/>
+    <path d="M560 700V420H900V700"/>
+    <path d="M260 420H470"/>
+    <path d="M560 500H900"/>
+    <path d="M630 420V700"/>
+    <path d="M730 420V700"/>
+    <path d="M815 420V700"/>
+    <path d="M320 420V700"/>
+    <path d="M395 420V700"/>
+    <path d="M140 250H1060" opacity="0.25"/>
+    <path d="M140 200H1060" opacity="0.15"/>
+    <path d="M180 300L440 180L720 270L980 180"/>
+  </g>
+  <g opacity="0.14" stroke="#1F1D1A" stroke-width="1">
+    <path d="M100 760H1100"/>
+    <path d="M100 120H1100"/>
+    <path d="M120 100V800"/>
+    <path d="M1080 100V800"/>
+    <path d="M220 100V800"/>
+    <path d="M360 100V800"/>
+    <path d="M500 100V800"/>
+    <path d="M640 100V800"/>
+    <path d="M780 100V800"/>
+    <path d="M920 100V800"/>
+    <path d="M100 220H1100"/>
+    <path d="M100 340H1100"/>
+    <path d="M100 460H1100"/>
+    <path d="M100 580H1100"/>
+    <path d="M100 700H1100"/>
+  </g>
+</svg>

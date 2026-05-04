@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-kitchen" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="14" width="48" height="36" rx="2" />
+    <path d="M20 14v36M44 14v36M8 28h48M28 20h8" />
+    <circle cx="24" cy="39" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="39" r="1.2" fill="currentColor" stroke="none" />
+  </symbol>
+  <symbol id="icon-bath" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 36h36a6 6 0 0 1-6 6H20a6 6 0 0 1-6-6Z" />
+    <path d="M18 36V22a6 6 0 0 1 12 0v4" />
+    <path d="M30 26h18" />
+    <path d="M46 26v-6" />
+    <path d="M20 42l-2 8M46 42l2 8" />
+  </symbol>
+  <symbol id="icon-bedroom" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 30h44v14H10z" />
+    <path d="M14 30v-8h12a8 8 0 0 1 8 8" />
+    <path d="M38 22h12v8" />
+    <path d="M14 44v6M50 44v6" />
+  </symbol>
+  <symbol id="icon-living" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 28h32a6 6 0 0 1 6 6v8H10v-8a6 6 0 0 1 6-6Z" />
+    <path d="M20 28v-6h8v6M36 28v-6h8v6" />
+    <path d="M16 42v6M48 42v6" />
+  </symbol>
+  <symbol id="icon-exterior" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 28 32 12l22 16" />
+    <path d="M16 26v24h32V26" />
+    <path d="M26 50V34h12v16" />
+    <path d="M22 30h4M38 30h4" />
+  </symbol>
+  <symbol id="icon-build" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 48h40" />
+    <path d="M18 48V24l14-10 14 10v24" />
+    <path d="M24 32h16M32 24v16" />
+  </symbol>
+  <symbol id="icon-plan" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 14h40v36H12z" />
+    <path d="M20 14v36M12 26h18M30 26v12M30 38h22" />
+    <path d="M40 14v12M40 26h12" />
+    <path d="M17 45h7M35 45h10" opacity="0.65" />
+  </symbol>
+  <symbol id="icon-scope" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 18h18v18H16z" />
+    <path d="M30 30h18v18H30z" />
+    <path d="M34 18h14v12M16 36v12h14" opacity="0.7" />
+    <path d="M22 24h6M36 42h6" />
+  </symbol>
+  <symbol id="icon-pin" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 54s16-15.2 16-28a16 16 0 0 0-32 0c0 12.8 16 28 16 28Z" />
+    <circle cx="32" cy="26" r="5.5" />
+    <path d="M22 54h20" opacity="0.65" />
+  </symbol>
+  <symbol id="icon-measure" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 42 42 12l10 10-30 30H12V42Z" />
+    <path d="m36 18 10 10M30 24l4 4M24 30l4 4M18 36l4 4" />
+  </symbol>
+  <symbol id="icon-contact" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 18h32v28H16z" />
+    <path d="m16 22 16 13 16-13" />
+    <path d="M22 50h20" opacity="0.65" />
+  </symbol>
+  <symbol id="icon-repair" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m20 16 8 8-8 8-8-8 8-8Z" />
+    <path d="m28 24 20 20" />
+    <path d="M44 18h8v8" />
+    <path d="M36 42l-8 8" />
+  </symbol>
+</svg>

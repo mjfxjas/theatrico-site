@@ -2,7 +2,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
-const routes = ['film', 'people', 'tivoli-proposal']
+const routes = ['film', 'people', 'tivoli-proposal', 'locksley']
 const distDir = process.argv[2] ?? 'dist'
 const outputPaths = process.argv.slice(3)
 

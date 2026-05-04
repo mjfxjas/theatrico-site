@@ -13,6 +13,8 @@ dist-ssr
 *.local
 public/media/*
 !public/media/.gitkeep
+!public/media/locksley/
+!public/media/locksley/**
 !public/media/tivoli/
 !public/media/tivoli/**
 public/portfolio/absh/assets/*.mov
