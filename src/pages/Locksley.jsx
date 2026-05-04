@@ -536,9 +536,14 @@ export default function Locksley() {
               </div>
             </div>
             <div className="locksley-hero-visual locksley-reveal" aria-hidden="true">
+              <div className="locksley-hero-brandmark locksley-reveal">
+                <span>83 Locksley</span>
+                <strong>Premier Builder / Renovator</strong>
+                <em>Chattanooga · North Georgia · Lookout · Signal</em>
+              </div>
               <div className="locksley-drafting-callout">
-                <span>83</span>
-                <strong>Locksley</strong>
+                <span>Structured intake</span>
+                <strong>Estimator-first</strong>
               </div>
             </div>
             <aside className="locksley-estimate-panel locksley-reveal">

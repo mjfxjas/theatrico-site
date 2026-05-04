@@ -136,6 +136,46 @@
   box-shadow: inset 0 0 0 1px rgba(32, 33, 29, 0.08);
 }
 
+.locksley-hero-brandmark {
+  position: absolute;
+  inset: 1.35rem 1.35rem auto auto;
+  z-index: 1;
+  display: grid;
+  gap: 0.28rem;
+  max-width: min(58%, 360px);
+  padding: 1.1rem 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: var(--locksley-radius);
+  background: linear-gradient(180deg, rgba(23, 24, 21, 0.76), rgba(23, 24, 21, 0.5));
+  color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 24px 42px rgba(10, 10, 9, 0.16);
+}
+
+.locksley-hero-brandmark span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.locksley-hero-brandmark strong {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 650;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.locksley-hero-brandmark em {
+  font-style: normal;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .locksley-drafting-callout {
   position: absolute;
   left: 1rem;
@@ -1145,6 +1185,11 @@
 
   .locksley-hero-visual {
     aspect-ratio: 4 / 3;
+  }
+
+  .locksley-hero-brandmark {
+    inset: 1rem 1rem auto 1rem;
+    max-width: none;
   }
 
   .locksley-metrics,
