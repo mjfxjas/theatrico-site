@@ -1,25 +1,13 @@
-const SafeLink = ({ href, children, className, ...props }) => {
-  // Sanitize href to prevent XSS attacks
-  const sanitizedHref = href && !href.toLowerCase().startsWith('javascript:') ? href : '#'
-  
-  // Improved external link detection
-  const isExternal = sanitizedHref?.startsWith('https://') || 
-                    sanitizedHref?.startsWith('http://') || 
-                    sanitizedHref?.startsWith('//')
-  
-  return (
-    <a 
-      href={sanitizedHref}
-      className={className}
-      {...(isExternal && { 
-        target: '_blank', 
-        rel: 'noopener noreferrer' 
-      })}
-      {...props}
-    >
-      {children}
-    </a>
-  )
-}
+import { safeLinkAttributes } from './safe-link.js'
+
+const SafeLink = ({ href, children, className, target, rel, ...props }) => (
+  <a
+    className={className}
+    {...props}
+    {...safeLinkAttributes(href, { target, rel })}
+  >
+    {children}
+  </a>
+)
 
 export default SafeLink

@@ -19,6 +19,7 @@ assets in `public/`; `dist/` is generated output.
 ## Validation and Build
 
 ```bash
+npm test
 npm run lint
 npm run build
 npm run preview
@@ -27,8 +28,9 @@ npm run preview
 Lint checks the repository with ESLint. Build creates `dist/` and runs
 `scripts/create-spa-route-indexes.mjs` to generate route entry points for
 `/film`, `/people`, and `/tivoli-proposal`. Preview serves the build locally.
-There is no automated application test suite configured yet; check navigation,
-direct route loads, and mobile layouts before publishing interface changes.
+`npm test` runs offline link-safety regression tests with Node's test runner.
+Check navigation, direct route loads, and mobile layouts before publishing
+interface changes.
 
 ## Project Layout
 
